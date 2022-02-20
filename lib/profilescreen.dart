@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/drawerscreen.dart';
+import 'package:learnifyflutter/editprofilescreen.dart';
 import 'package:learnifyflutter/mainscreen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -49,23 +50,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Colors.white,
                         ),
                       ),
+                      Text(
+                        'My Profile',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: 'Nisebuschgardens',
+                        ),
+                      ),
                       Icon(
                         Icons.logout,
                         color: Colors.white,
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  Text(
-                    'My Profile',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontFamily: 'Nisebuschgardens',
-                    ),
                   ),
                   SizedBox(
                     height: 15,
@@ -198,6 +196,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             Positioned(
+                              top: 110,
+                              left: 20,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditProfileScreen()));
+                                },
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.grey[700],
+                                  size: 30,
+                                ),
+                              ),
+                            ),
+                            Positioned(
                               top: 0,
                               left: 0,
                               right: 0,
@@ -234,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 20,
                           ),
                           Text(
-                            'My Orders',
+                            'My courses',
                             style: TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 27,

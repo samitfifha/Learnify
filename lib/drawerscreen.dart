@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/settingscreen.dart';
 
 import 'content_model.dart';
 
@@ -86,6 +87,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 width: 10,
               ),
               InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SettingScreen()));
+                },
                 child: Text(
                   'Settings',
                   style: TextStyle(

@@ -19,25 +19,31 @@ class _Screen2State extends State<Screen2> {
       body: Stack(
         children: [
           Positioned.fill(
+              bottom: 250,
               child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.blueGrey[300],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                ),
-              )
-            ],
-          )),
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.amber,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              )),
           Container(
             margin: EdgeInsets.only(top: 20),
             child: Align(
               alignment: Alignment.topCenter,
-              child: Hero(tag: 1, child: Image.asset('assets/images/code.png')),
+              child: Hero(
+                  tag: 1,
+                  child: Image.asset(
+                    'assets/images/code.png',
+                    scale: 2,
+                  )),
             ),
           ),
           Container(
@@ -58,15 +64,18 @@ class _Screen2State extends State<Screen2> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              height: 100,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: shadowList,
-                  borderRadius: BorderRadius.circular(20)),
+          Padding(
+            padding: const EdgeInsets.only(top: 215),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                height: 90,
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: shadowList,
+                    borderRadius: BorderRadius.circular(20)),
+              ),
             ),
           ),
           Align(
@@ -74,11 +83,11 @@ class _Screen2State extends State<Screen2> {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.symmetric(horizontal: 15),
-              height: 120,
+              height: 90,
               child: Row(
                 children: [
                   Container(
-                    height: 60,
+                    height: 40,
                     width: 70,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -97,7 +106,7 @@ class _Screen2State extends State<Screen2> {
                   ),
                   Expanded(
                     child: Container(
-                      height: 60,
+                      height: 40,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
