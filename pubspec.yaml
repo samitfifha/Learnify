@@ -38,7 +38,7 @@ dependencies:
   introduction_screen:
   pin_code_fields:
   flutter_custom_clippers:
-  image_picker: ^0.8.4+9
+  image_picker: ^0.8.4+10
   jitsi_meet:
   flutter_svg: ^0.20.0-nullsafety.3
   kf_drawer: ^1.2.1

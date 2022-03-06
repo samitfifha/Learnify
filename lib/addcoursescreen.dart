@@ -139,6 +139,52 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                                           height: 15,
                                           thickness: 2,
                                         ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: CheckboxListTile(
+                                                title: const Text(
+                                                  "Meeting",
+                                                  style: TextStyle(fontSize: 6),
+                                                ),
+                                                value: isChecked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    isChecked = value!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: CheckboxListTile(
+                                                title: const Text(
+                                                  "PDF",
+                                                  style: TextStyle(fontSize: 6),
+                                                ),
+                                                value: isChecked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    isChecked = value!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: CheckboxListTile(
+                                                title: const Text(
+                                                  "Videos",
+                                                  style: TextStyle(fontSize: 6),
+                                                ),
+                                                value: isChecked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    isChecked = value!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                         SizedBox(
                                           height: 10,
                                         ),

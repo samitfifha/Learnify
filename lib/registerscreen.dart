@@ -194,16 +194,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: "Phone Number",
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none),
-                // onSaved: (String? value) {
-                //   phonenumber = value;
-                // },
-                // validator: (String? value) {
-                //   if (value == null || value.isEmpty) {
-                //     return "Username must not be empty";
-                //   } else {
-                //     return null;
-                //   }
-                // },
+                onSaved: (String? value) {
+                  phonenumber = value;
+                },
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "phone must not be empty";
+                  } else {
+                    return null;
+                  }
+                },
               ),
             ),
             Container(
@@ -292,6 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     "firstName": firstname!,
                     "lastName": lastname!,
                     "email": email!,
+                    "phone": phonenumber,
                     "password": password!
                   };
                   http

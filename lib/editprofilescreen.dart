@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:learnifyflutter/mainscreen.dart';
 import 'package:learnifyflutter/profilescreen.dart';
 import 'package:learnifyflutter/settingscreen.dart';
@@ -64,6 +65,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
     return true;
   }
+
+  Future pickImage() async {
+    await ImagePicker().pickImage(source: ImageSource.camera);
+  }
+
+  Widget cameraButton = TextButton(
+    child: Text("Cancel"),
+    onPressed: () {
+      ImagePicker().pickImage(source: ImageSource.camera);
+    },
+  );
+  Widget galeryButton = TextButton(
+    child: Text("Continue"),
+    onPressed: () {
+      ImagePicker().pickImage(source: ImageSource.gallery);
+    },
+  );
 
   @override
   void initState() {
@@ -176,26 +194,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                     profilePic,
                                               ))),
                                     ),
-                                    Positioned(
-                                        bottom: 0,
-                                        right: 0,
-                                        child: Container(
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              width: 4,
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
+                                    InkWell(
+                                      onTap: () => pickImage(),
+                                      child: Positioned(
+                                          bottom: 0,
+                                          right: 0,
+                                          child: Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                width: 4,
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
+                                              ),
+                                              color: Colors.green,
                                             ),
-                                            color: Colors.green,
-                                          ),
-                                          child: Icon(
-                                            Icons.edit,
-                                            color: Colors.white,
-                                          ),
-                                        )),
+                                            child: Icon(
+                                              Icons.edit,
+                                              color: Colors.white,
+                                            ),
+                                          )),
+                                    ),
                                   ],
                                 ),
                               ),
