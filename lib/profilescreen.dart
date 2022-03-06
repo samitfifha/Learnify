@@ -244,6 +244,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                     Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Center(
+                                        child: Container(
+                                          width: 100,
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 3,
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    spreadRadius: 2,
+                                                    blurRadius: 10,
+                                                    color: Colors.black
+                                                        .withOpacity(0.1),
+                                                    offset: Offset(0, 10))
+                                              ],
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(
+                                                    imagePath,
+                                                  ))),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
                                       top: 110,
                                       right: 20,
                                       child: Icon(
@@ -267,20 +297,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Icons.edit,
                                           color: Colors.grey[700],
                                           size: 30,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: Center(
-                                        child: Container(
-                                          child: Image.network(
-                                            imagePath,
-                                            width: innerWidth * 0.30,
-                                            fit: BoxFit.fitWidth,
-                                          ),
                                         ),
                                       ),
                                     ),

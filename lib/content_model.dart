@@ -6,6 +6,7 @@ import 'package:learnifyflutter/forumscreen.dart';
 import 'package:learnifyflutter/messagesscreen.dart';
 import 'package:learnifyflutter/profilescreen.dart';
 import 'package:learnifyflutter/screen2.dart';
+import 'package:learnifyflutter/choicetypescreen.dart';
 
 class UnbordingContent {
   final String image;
@@ -57,7 +58,7 @@ List<Map> drawerItems = [
   {
     'icon': FontAwesomeIcons.plus,
     'title': 'Add course',
-    'screen': AddCourseScreen()
+    'screen': ChoiceTypeScreen()
   },
   {
     'icon': Icons.favorite_border,

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learnifyflutter/mainscreen.dart';
@@ -19,6 +22,13 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   bool showPassword = false;
+  String initalfname = '';
+  String initiallname = '';
+  String initialemail = '';
+  String initialbirthdate = '';
+  String initialdegree = '';
+  String initialjob = '';
+  String initialphone = '';
 
   TextEditingController firstnameContoller = new TextEditingController();
   TextEditingController lastnameController = new TextEditingController();
@@ -36,6 +46,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late String birthDate;
   late String degree;
   late String job;
+  late String phone;
+  late String imagePath;
+  late XFile? imgprofile;
 
   late Future<bool> fetchedUser;
 
@@ -46,19 +59,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     http.Response response = await http
         .get(Uri.parse(BaseURL + "users/" + userid))
         .then((response) async {
-      print(response.statusCode);
       if (response.statusCode == 201) {
         Map<String, dynamic> userData = json.decode(response.body);
 
         firstName = userData["firstName"];
+        initalfname = firstName;
         lastName = userData["lastName"];
         profilePicpath = userData["profilePic"];
         profilePic = profilePicpath.substring(22, profilePicpath.length);
         email = userData["email"];
-        birthDate = userData["birthdate"];
-        degree = userData["degree"];
-        job = userData["job"];
+        birthDate = userData["birthdate"] ?? "";
 
+        degree = userData["degree"] ?? "";
+        phone = userData["phone"];
+        job = userData["job"] ?? "";
+
+        if (profilePicpath.startsWith('public')) {
+          profilePic = profilePicpath.substring(22, profilePicpath.length);
+          imagePath = BaseURL + 'images/uploads/' + profilePic;
+        } else if (profilePicpath.startsWith('https')) {
+          profilePicpath = userData["profilePic"];
+          imagePath = profilePicpath;
+        }
         //print(profilePic);
       }
       return response;
@@ -67,7 +89,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future pickImage() async {
-    await ImagePicker().pickImage(source: ImageSource.camera);
+    imgprofile = (await ImagePicker().pickImage(source: ImageSource.gallery));
+
+    var stream =
+        new http.ByteStream(DelegatingStream.typed(imgprofile!.openRead()));
+    var length = await imgprofile!.length();
+    print(basename(imgprofile!.path));
+
+    var uri = Uri.parse(BaseURL + "users/picture/" + userid);
+
+    var request = new http.MultipartRequest("PUT", uri);
+    var multipartFile = new http.MultipartFile('profilePic', stream, length,
+        filename: basename(imgprofile!.path));
+    //contentType: new MediaType('image', 'png'));
+
+    request.files.add(multipartFile);
+    var response = await request.send();
+    //print(response.statusCode);
+    response.stream.transform(utf8.decoder).listen((value) {
+      //print(value);
+    });
+    sleep(const Duration(seconds: 5));
   }
 
   Widget cameraButton = TextButton(
@@ -189,9 +231,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
-                                                BaseURL +
-                                                    'images/uploads/' +
-                                                    profilePic,
+                                                imagePath,
                                               ))),
                                     ),
                                     InkWell(
@@ -414,6 +454,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextFormField(
         controller: textEditingController,
+        //initialValue: placeholder,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
