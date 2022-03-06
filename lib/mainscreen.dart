@@ -3,6 +3,7 @@ import 'package:learnifyflutter/drawerscreen.dart';
 import 'package:learnifyflutter/homescreen.dart';
 
 class MainScreen extends StatefulWidget {
+  static const String id = "idmainscreen";
   const MainScreen({Key? key}) : super(key: key);
 
   @override

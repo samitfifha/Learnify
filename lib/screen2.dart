@@ -95,7 +95,7 @@ class _Screen2State extends State<Screen2> {
                           end: Alignment.bottomCenter,
                           colors: [Colors.teal, Colors.indigo],
                         ),
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(100)),
                     child: Icon(
                       Icons.favorite_border,
                       color: Colors.white,

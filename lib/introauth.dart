@@ -5,6 +5,7 @@ import 'package:learnifyflutter/registerscreen.dart';
 import 'content_model.dart';
 
 class IntroAuth extends StatefulWidget {
+  static const String id = "idintroauth";
   const IntroAuth({Key? key}) : super(key: key);
 
   @override

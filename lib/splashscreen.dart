@@ -3,6 +3,7 @@ import 'package:learnifyflutter/introauth.dart';
 import 'dart:async';
 
 import 'package:learnifyflutter/registerscreen.dart';
+import 'package:learnifyflutter/utilities/session.dart';
 
 class SplachScreen extends StatefulWidget {
   const SplachScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _SplachScreenState extends State<SplachScreen> {
     Timer(
         Duration(seconds: 2),
         () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => IntroAuth())));
+            context, MaterialPageRoute(builder: (context) => Session())));
   }
 
   @override

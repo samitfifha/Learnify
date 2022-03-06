@@ -49,14 +49,26 @@ List<Map> categories = [
 ];
 
 List<Map> drawerItems = [
-  {'icon': Icons.spellcheck, 'title': 'Forum', 'screen': ForumScreen()},
+  {
+    'icon': Icons.notifications,
+    'title': 'Notification',
+    'screen': ForumScreen()
+  },
   {
     'icon': FontAwesomeIcons.plus,
     'title': 'Add course',
     'screen': AddCourseScreen()
   },
-  {'icon': Icons.favorite, 'title': 'Favorites', 'screen': FavoriteScreen()},
-  {'icon': Icons.mail, 'title': 'Messages', 'screen': MessagesScreen()},
+  {
+    'icon': Icons.favorite_border,
+    'title': 'Favorites',
+    'screen': FavoriteScreen()
+  },
+  {
+    'icon': Icons.mark_email_unread,
+    'title': 'Messages',
+    'screen': MessagesScreen()
+  },
   {
     'icon': FontAwesomeIcons.userAlt,
     'title': 'Profile',

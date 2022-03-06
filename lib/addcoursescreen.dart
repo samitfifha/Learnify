@@ -13,6 +13,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   final items = ['Coding', 'programming', 'languages', 'cretifed', 'math'];
   final items1 = ['1 ', '2', '3', '4', '5', '6', '7', '8'];
   String? value;
+  String _value = "";
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -184,6 +186,43 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                                             onChanged: (value) => setState(
                                                 () => this.value = value),
                                           ),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Flexible(
+                                              child: CheckboxListTile(
+                                                title: const Text(
+                                                  "payed",
+                                                ),
+                                                value: isChecked,
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    isChecked = value!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            if (isChecked)
+                                              Flexible(
+                                                child: TextField(
+                                                  decoration: InputDecoration(
+                                                    icon: Icon(
+                                                      Icons.description,
+                                                      color: Colors.blueAccent,
+                                                    ),
+                                                    hintText: "price TND",
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
                                         ),
                                       ],
                                     ),

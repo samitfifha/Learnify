@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/loginscreen.dart';
 import 'package:learnifyflutter/settingscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'content_model.dart';
 
@@ -108,10 +110,24 @@ class _DrawerScreenState extends State<DrawerScreen> {
               SizedBox(
                 width: 10,
               ),
-              Text(
-                'Log out',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.remove("_id");
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const LoginScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Log out',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               )
             ],
           )
