@@ -1,11 +1,19 @@
+import 'dart:io';
+
+import 'package:async/async.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:learnifyflutter/choicetypescreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:learnifyflutter/utils.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:file/file.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FileCourseScreen extends StatefulWidget {
   const FileCourseScreen({Key? key}) : super(key: key);
@@ -15,19 +23,42 @@ class FileCourseScreen extends StatefulWidget {
 }
 
 class _FileCourseScreenState extends State<FileCourseScreen> {
+  late String userid;
   late String? coursename;
   late String? coursedesc;
   late String? price;
+  late String? tag;
+  late String? Coursefile;
+
+  Future pickImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("_id")!;
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      Coursefile = result.files.single.path;
+    } else {
+      // User canceled the picker
+    }
+
+    var uri = Uri.parse(BaseURL + "courses/new/" + userid);
+
+    var request = http.MultipartRequest('POST', uri);
+    request.files
+        .add(await http.MultipartFile.fromPath('support', Coursefile!));
+    var response = await request.send();
+    //print(response.statusCode);
+    response.stream.transform(utf8.decoder).listen((value) {
+      //print(value);
+    });
+    sleep(const Duration(seconds: 5));
+  }
 
   final items = ['Coding', 'programming', 'languages', 'cretifed', 'math'];
   final items1 = ['1 ', '2', '3', '4', '5', '6', '7', '8'];
   String? value;
   String _value = "";
   bool isChecked = false;
-
-  Future pickImage() async {
-    await ImagePicker().pickImage(source: ImageSource.gallery);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,19 +300,22 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                                       blurRadius: 50,
                                                       color: Color(0xffEEEEEE)),
                                                 ]),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "Add Files",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                SizedBox(width: 130),
-                                                Icon(
-                                                  Icons.add,
-                                                  color: Colors.white,
-                                                ),
-                                              ],
+                                            child: InkWell(
+                                              onTap: () => pickImage(),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Add Files",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  SizedBox(width: 130),
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
