@@ -36,6 +36,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController birthdateController = new TextEditingController();
   TextEditingController degreeController = new TextEditingController();
   TextEditingController jobController = new TextEditingController();
+  TextEditingController phonenumbercontroller = new TextEditingController();
 
   late String userid;
   late String firstName;
@@ -212,8 +213,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 child: Stack(
                                   children: [
                                     Container(
-                                      width: 130,
-                                      height: 130,
+                                      width: 100,
+                                      height: 100,
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               width: 4,
@@ -245,7 +246,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               border: Border.all(
-                                                width: 4,
+                                                width: 2,
                                                 color: Theme.of(context)
                                                     .scaffoldBackgroundColor,
                                               ),
@@ -322,6 +323,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                     "Job",
                                                     job,
                                                     false),
+                                                buildTextFormField(
+                                                    phonenumbercontroller,
+                                                    "Phone",
+                                                    phone,
+                                                    false)
                                               ],
                                             ),
                                           ),
@@ -387,7 +393,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             "birthdate":
                                                 birthdateController.text,
                                             "degree": degreeController.text,
-                                            "job": jobController.text
+                                            "job": jobController.text,
+                                            "phone": phonenumbercontroller.text,
                                           };
                                           http
                                               .put(

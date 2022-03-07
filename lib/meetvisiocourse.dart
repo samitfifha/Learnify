@@ -74,7 +74,7 @@ class _MeetCourseScreenState extends State<MeetCourseScreen> {
                           ),
                         ),
                         Text(
-                          'Video Courses',
+                          'VisioConference Courses',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
