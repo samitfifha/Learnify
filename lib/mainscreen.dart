@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/drawerscreen.dart';
 import 'package:learnifyflutter/homescreen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MainScreen extends StatefulWidget {
   static const String id = "idmainscreen";

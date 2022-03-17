@@ -40,7 +40,6 @@ dependencies:
   flutter_custom_clippers:
   image_picker: ^0.8.4+10
   jitsi_meet:
-  flutter_svg: ^0.20.0-nullsafety.3
   kf_drawer: ^1.2.1
   font_awesome_flutter:
   http: ^0.13.4
@@ -49,6 +48,10 @@ dependencies:
   async: ^2.8.1
   file_picker:
   dio:
+  flutter_svg: ^0.22.0
+  cached_network_image: ^3.1.0
+  badges: ^2.0.2
+  carousel_slider: ^4.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -80,6 +83,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/category/
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

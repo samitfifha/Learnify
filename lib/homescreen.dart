@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/screen2.dart';
 import 'content_model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -98,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.grey[700],
                           ),
                         ),
-                        Text(categories[index]['name'])
+                        Center(child: Text(categories[index]['name']))
                       ],
                     ),
                   );

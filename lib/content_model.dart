@@ -7,6 +7,8 @@ import 'package:learnifyflutter/messagesscreen.dart';
 import 'package:learnifyflutter/profilescreen.dart';
 import 'package:learnifyflutter/screen2.dart';
 import 'package:learnifyflutter/choicetypescreen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class UnbordingContent {
   final String image;
@@ -42,11 +44,15 @@ List<BoxShadow> shadowList = [
   BoxShadow(color: Colors.grey[300]!, blurRadius: 30, offset: Offset(0, 10))
 ];
 List<Map> categories = [
-  {'name': 'Coding', 'iconPath': 'assets/images/code.png'},
-  {'name': 'maths', 'iconPath': 'assets/images/math.png'},
-  {'name': 'languages', 'iconPath': 'assets/images/translate.png'},
-  {'name': 'Courses', 'iconPath': 'assets/images/online-course.png'},
-  {'name': 'support', 'iconPath': 'assets/images/support.png'}
+  {"name": 'All', 'iconPath': 'assets/images/all.png'},
+  {'name': 'Coding', 'iconPath': 'assets/images/coding.png'},
+  {'name': 'education', 'iconPath': 'assets/images/education.png'},
+  {'name': 'design', 'iconPath': 'assets/images/design.png'},
+  {'name': 'business', 'iconPath': 'assets/images/business.png'},
+  {'name': 'cooking', 'iconPath': 'assets/images/cooking.png'},
+  {'name': 'music', 'iconPath': 'assets/images/music.png'},
+  {'name': 'art', 'iconPath': 'assets/images/art.png'},
+  {'name': 'finance', 'iconPath': 'assets/images/finance.png'},
 ];
 
 List<Map> drawerItems = [
