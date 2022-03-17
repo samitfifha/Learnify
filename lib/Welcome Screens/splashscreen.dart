@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/introauth.dart';
 import 'dart:async';
+import 'package:learnifyflutter/Welcome Screens/introauth.dart';
+import 'package:learnifyflutter/Welcome Screens/registerscreen.dart';
 
-import 'package:learnifyflutter/registerscreen.dart';
 import 'package:learnifyflutter/utilities/session.dart';
 
 class SplachScreen extends StatefulWidget {

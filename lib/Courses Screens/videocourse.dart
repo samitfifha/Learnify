@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:learnifyflutter/choicetypescreen.dart';
-
-import 'mainscreen.dart';
+import 'package:learnifyflutter/Courses%20Screens/choicetypescreen.dart';
+import 'package:learnifyflutter/Welcome Screens/mainscreen.dart';
 
 class VideoCourseScreen extends StatefulWidget {
   const VideoCourseScreen({Key? key}) : super(key: key);

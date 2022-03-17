@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:learnifyflutter/drawerscreen.dart';
-import 'package:learnifyflutter/editprofilescreen.dart';
-import 'package:learnifyflutter/mainscreen.dart';
+import 'package:learnifyflutter/User%20Screens/editprofilescreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
+
+import 'package:learnifyflutter/Welcome Screens/drawerscreen.dart';
+import 'package:learnifyflutter/Welcome Screens/mainscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:learnifyflutter/utils.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';

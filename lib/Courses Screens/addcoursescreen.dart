@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/mainscreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddCourseScreen extends StatefulWidget {

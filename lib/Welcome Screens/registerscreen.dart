@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/loginscreen.dart';
-import 'package:learnifyflutter/mainscreen.dart';
-import 'package:learnifyflutter/utils.dart';
+import 'package:learnifyflutter/Welcome%20Screens/loginscreen.dart';
+import 'mainscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:learnifyflutter/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:learnifyflutter/utilities/utils.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

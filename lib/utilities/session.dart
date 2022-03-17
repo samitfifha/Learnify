@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/introauth.dart';
+import 'package:learnifyflutter/Welcome%20Screens/introauth.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:learnifyflutter/mainscreen.dart';
-import 'package:learnifyflutter/splashscreen.dart';
+
+import 'package:learnifyflutter/Welcome Screens/mainscreen.dart';
+import 'package:learnifyflutter/Welcome Screens/splashscreen.dart';
+import 'package:learnifyflutter/Welcome Screens/introauth.dart';
 
 class Session extends StatefulWidget {
   const Session({Key? key}) : super(key: key);

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:learnifyflutter/addcoursescreen.dart';
+import 'package:learnifyflutter/User%20Screens/profilescreen.dart';
 import 'package:learnifyflutter/favoritescreen.dart';
 import 'package:learnifyflutter/forumscreen.dart';
 import 'package:learnifyflutter/messagesscreen.dart';
-import 'package:learnifyflutter/profilescreen.dart';
 import 'package:learnifyflutter/screen2.dart';
-import 'package:learnifyflutter/choicetypescreen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../Courses Screens/choicetypescreen.dart';
 
 class UnbordingContent {
   final String image;

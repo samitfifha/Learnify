@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/filecourse.dart';
-import 'package:learnifyflutter/mainscreen.dart';
-import 'package:learnifyflutter/meetvisiocourse.dart';
-import 'package:learnifyflutter/videocourse.dart';
+import 'package:learnifyflutter/Courses%20Screens/filecourse.dart';
+import 'package:learnifyflutter/Courses%20Screens/meetvisiocourse.dart';
+import 'package:learnifyflutter/Courses%20Screens/videocourse.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 
 class ChoiceTypeScreen extends StatefulWidget {
   const ChoiceTypeScreen({Key? key}) : super(key: key);

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/loginscreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/loginscreen.dart';
+
 import 'package:learnifyflutter/settingscreen.dart';
+import 'package:learnifyflutter/utilities/content_model.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:learnifyflutter/utils.dart';
 import 'dart:convert';
 import 'package:path/path.dart';
-
-import 'content_model.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);

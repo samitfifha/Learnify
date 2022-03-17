@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/homescreen.dart';
-import 'package:learnifyflutter/mainscreen.dart';
-import 'package:learnifyflutter/registerscreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/registerscreen.dart';
+
+import 'package:learnifyflutter/Welcome Screens/mainscreen.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:learnifyflutter/utils.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {

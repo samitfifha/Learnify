@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/content_model.dart';
-import 'package:learnifyflutter/homescreen.dart';
-import 'package:learnifyflutter/mainscreen.dart';
+import 'package:learnifyflutter/utilities/content_model.dart';
 
 class Screen2 extends StatefulWidget {
   const Screen2({Key? key}) : super(key: key);

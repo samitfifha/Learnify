@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/profilescreen.dart';
+import 'package:learnifyflutter/User%20Screens/profilescreen.dart';
 
 class SettingsUI extends StatelessWidget {
   @override

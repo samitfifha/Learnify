@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/screen2.dart';
-import 'content_model.dart';
+import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 

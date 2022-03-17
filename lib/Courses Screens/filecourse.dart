@@ -1,31 +1,57 @@
+import 'dart:io';
+
+import 'package:async/async.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:learnifyflutter/choicetypescreen.dart';
-import 'package:uuid/uuid.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:learnifyflutter/Courses%20Screens/choicetypescreen.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:file/file.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
-class MeetCourseScreen extends StatefulWidget {
-  const MeetCourseScreen({Key? key}) : super(key: key);
+class FileCourseScreen extends StatefulWidget {
+  const FileCourseScreen({Key? key}) : super(key: key);
 
   @override
-  State<MeetCourseScreen> createState() => _MeetCourseScreenState();
+  State<FileCourseScreen> createState() => _FileCourseScreenState();
 }
 
-class _MeetCourseScreenState extends State<MeetCourseScreen> {
-  String code = '';
-  createcode() {
-    setState(() {
-      code = Uuid().v1().substring(0, 6);
-    });
-  }
-
-  late PickedFile _imgcourse;
-  late String? courseName;
-  late String? CourseDesc;
+class _FileCourseScreenState extends State<FileCourseScreen> {
+  late String userid;
+  late String? coursename;
+  late String? coursedesc;
+  late String? price;
   late String? tag;
-  late String price;
-  late PickedFile _coursefile;
+  late String? Coursefile;
+
   Future pickImage() async {
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("_id")!;
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      Coursefile = result.files.single.path;
+    } else {
+      // User canceled the picker
+    }
+
+    var uri = Uri.parse(BaseURL + "courses/new/" + userid);
+
+    var request = http.MultipartRequest('POST', uri);
+    request.files
+        .add(await http.MultipartFile.fromPath('support', Coursefile!));
+    var response = await request.send();
+    //print(response.statusCode);
+    response.stream.transform(utf8.decoder).listen((value) {
+      //print(value);
+    });
+    sleep(const Duration(seconds: 5));
   }
 
   final items = ['Coding', 'programming', 'languages', 'cretifed', 'math'];
@@ -33,6 +59,7 @@ class _MeetCourseScreenState extends State<MeetCourseScreen> {
   String? value;
   String _value = "";
   bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -74,7 +101,7 @@ class _MeetCourseScreenState extends State<MeetCourseScreen> {
                           ),
                         ),
                         Text(
-                          'VisioConference Courses',
+                          'Video Courses',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
@@ -248,60 +275,49 @@ class _MeetCourseScreenState extends State<MeetCourseScreen> {
                                               ),
                                           ],
                                         ),
-                                        InkWell(
-                                          onTap: () => createcode(),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 20, right: 20, top: 10),
-                                              padding: EdgeInsets.only(
-                                                  left: 20, right: 20),
-                                              alignment: Alignment.center,
-                                              height: 54,
-                                              decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                        (Colors.green),
-                                                        (Colors.black)
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end: Alignment
-                                                          .centerRight),
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        offset: Offset(0, 10),
-                                                        blurRadius: 50,
-                                                        color:
-                                                            Color(0xffEEEEEE)),
-                                                  ]),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                left: 20, right: 20, top: 10),
+                                            padding: EdgeInsets.only(
+                                                left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            height: 54,
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                    colors: [
+                                                      (Colors.green),
+                                                      (Colors.black)
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      offset: Offset(0, 10),
+                                                      blurRadius: 50,
+                                                      color: Color(0xffEEEEEE)),
+                                                ]),
+                                            child: InkWell(
+                                              onTap: () => pickImage(),
                                               child: Row(
                                                 children: [
-                                                  SizedBox(
-                                                    width: 60,
-                                                  ),
                                                   Text(
-                                                    "Create Meet Code",
+                                                    "Add Files",
                                                     style: TextStyle(
                                                         color: Colors.white),
+                                                  ),
+                                                  SizedBox(width: 130),
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text("Code: "),
-                                            Text(
-                                              code,
-                                            ),
-                                          ],
                                         ),
                                       ],
                                     ),
