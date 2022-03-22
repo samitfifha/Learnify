@@ -1,19 +1,21 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/widgets/feature_item.dart';
 import 'package:learnifyflutter/widgets/recommend_item.dart';
+import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/screen2.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:learnifyflutter/utilities/data.dart';
+import 'utilities/data.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-  _HomeScreenState createState() => _HomeScreenState();
+class TestScreen extends StatefulWidget {
+  const TestScreen({Key? key, required this.data}) : super(key: key);
+  final data;
+
+  State<TestScreen> createState() => _TestScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _TestScreenState extends State<TestScreen> {
   double xOffset = 0;
   double yOffset = 0;
   double scaleFactor = 1;
