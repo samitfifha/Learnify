@@ -194,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            //getRecommend(),
+                            getRecommend(),
                           ]),
                     ),
                   ),
@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  /*getRecommend() {
+  getRecommend() {
     return SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(15, 5, 0, 5),
       scrollDirection: Axis.horizontal,
@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {},
                   )))),
     );
-  }*/
+  }
 
   getFeature() {
     return CarouselSlider(

@@ -9,6 +9,9 @@ import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:readmore/readmore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:learnifyflutter/Models/coursesModel.dart';
 
 class Screen2 extends StatefulWidget {
   var myObject;
@@ -19,10 +22,15 @@ class Screen2 extends StatefulWidget {
 
 class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   late TabController tabController;
+  late Future<bool> fetchedLessons;
 
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    print(widget.myObject.lessons);
+    print(
+      widget.myObject.lessons[0]["title"],
+    );
   }
 
   String func() {
@@ -223,48 +231,54 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Price",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              widget.myObject.price.toString(),
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          width: 5,
+                          height: 300,
+                          child:
+                              TabBarView(controller: tabController, children: [
+                            getlesson(),
+                            Text("data1"),
+                          ]),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-                          padding: EdgeInsets.only(left: 20, right: 20),
-                          alignment: Alignment.center,
-                          height: 54,
-                          width: 240,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            "buy",
-                            style: TextStyle(color: Colors.white),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Price",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    widget.myObject.price.toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 20, right: 20, top: 20),
+                                padding: EdgeInsets.only(left: 20, right: 20),
+                                alignment: Alignment.center,
+                                height: 55,
+                                width: 240,
+                                decoration: BoxDecoration(
+                                  color: Colors.lightBlue,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  "buy",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -276,6 +290,51 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  Widget getlesson() {
+    return ListView.builder(
+      itemCount: widget.myObject.lessons.length,
+      itemBuilder: (context, index) => Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 5, bottom: 5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white70.withOpacity(.07),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: Offset(1, 1),
+              )
+            ]),
+        child: Row(
+          children: [
+            CustomImage(
+              func(),
+              radius: 10,
+              width: 70,
+              height: 70,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.myObject.lessons[index]["title"]),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("lesson")
+              ],
+            ))
+          ],
+        ),
+      ),
     );
   }
 }

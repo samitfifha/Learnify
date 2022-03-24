@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/screen2.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 
 class RecommendItem extends StatelessWidget {
   RecommendItem({Key? key, required this.data, this.onTap}) : super(key: key);
   final data;
   final GestureTapCallback? onTap;
 
+  String func() {
+    final profilePicpath = data.image.toString();
+    if (data.image.startsWith('public')) {
+      final profilePic = profilePicpath.substring(22, profilePicpath.length);
+      final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+      return imagePath;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Screen2(myObject: data),
+          ),
+        );
+      },
       child: Container(
           margin: EdgeInsets.only(right: 10),
           padding: EdgeInsets.all(10),
@@ -29,7 +48,7 @@ class RecommendItem extends StatelessWidget {
           child: Row(
             children: [
               CustomImage(
-                data["image"],
+                func(),
                 radius: 15,
                 height: 80,
               ),
@@ -40,7 +59,7 @@ class RecommendItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data["name"],
+                    data.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -52,7 +71,7 @@ class RecommendItem extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    data["price"],
+                    data.price.toString(),
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                   SizedBox(
@@ -69,7 +88,7 @@ class RecommendItem extends StatelessWidget {
                         width: 2,
                       ),
                       Text(
-                        data["duration"],
+                        data.nbrSeance.toString(),
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
                       SizedBox(
@@ -84,7 +103,7 @@ class RecommendItem extends StatelessWidget {
                         width: 2,
                       ),
                       Text(
-                        data["review"],
+                        data.tag,
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       )
                     ],

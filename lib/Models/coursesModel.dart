@@ -12,7 +12,8 @@ class Course {
       required this.tag,
       required this.price,
       required this.user,
-      required this.image});
+      required this.image,
+      this.lessons});
   final String id;
   final String title;
   final String description;
@@ -21,6 +22,7 @@ class Course {
   final int price;
   final String user;
   final String image;
+  final List? lessons;
 
   factory Course.fromJson(Map<String, dynamic> data) {
     final id = data['_id'] as String; // cast as non-nullable String
@@ -31,6 +33,7 @@ class Course {
     final price = data['price'] as int; // cast as nullable int
     final user = data['user'] as String; // cast as nullable int
     final image = data['image'] as String; // cast as nullable int
+    final lessons = data['lessons'] as List?; // cast as nullable int
 
     return Course(
         id: id,
@@ -40,6 +43,7 @@ class Course {
         tag: tag,
         price: price,
         user: user,
-        image: image);
+        image: image,
+        lessons: lessons);
   }
 }
