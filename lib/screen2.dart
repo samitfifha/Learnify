@@ -2,24 +2,37 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
+import 'package:learnifyflutter/Models/CoursesModel.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:readmore/readmore.dart';
 
 class Screen2 extends StatefulWidget {
-  const Screen2({Key? key}) : super(key: key);
-
+  var myObject;
+  Screen2({this.myObject});
   @override
   _Screen2State createState() => _Screen2State();
 }
 
 class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   late TabController tabController;
+
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+  }
+
+  String func() {
+    final profilePicpath = widget.myObject.image;
+    if (profilePicpath.startsWith('public')) {
+      final profilePic = profilePicpath.substring(22, profilePicpath.length);
+      final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+      return imagePath;
+    }
+    return '';
   }
 
   @override
@@ -80,11 +93,11 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                     height: 15,
                   ),
                   SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                    padding: EdgeInsets.fromLTRB(15, 20, 15, 30),
                     child: Column(
                       children: [
                         CustomImage(
-                          courses[1]["image"],
+                          func(),
                           radius: 10,
                           width: double.infinity,
                           height: 200,
@@ -95,14 +108,14 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                               Row(
                                 children: [
                                   Text(
-                                    "Course 1",
+                                    widget.myObject.title.toString(),
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w400,
                                         color: Colors.white),
                                   ),
                                   SizedBox(
-                                    width: 220,
+                                    width: 180,
                                   ),
                                   Icon(
                                     Icons.bookmark_add_outlined,
@@ -125,7 +138,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     width: 5,
                                   ),
                                   Text(
-                                    "6 Lesson",
+                                    widget.myObject.nbrSeance.toString(),
                                     style: TextStyle(color: Colors.white70),
                                   ),
                                   SizedBox(
@@ -140,7 +153,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     width: 5,
                                   ),
                                   Text(
-                                    "6 hours",
+                                    widget.myObject.nbrSeance.toString(),
                                     style: TextStyle(color: Colors.white70),
                                   ),
                                   SizedBox(
@@ -155,7 +168,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     width: 5,
                                   ),
                                   Text(
-                                    "4.5",
+                                    widget.myObject.tag.toString(),
                                     style: TextStyle(color: Colors.white70),
                                   ),
                                 ],
@@ -181,7 +194,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     ],
                                   ),
                                   ReadMoreText(
-                                    courses[0]["description"],
+                                    widget.myObject.description.toString(),
                                     trimLines: 2,
                                     trimMode: TrimMode.Line,
                                     style: TextStyle(
@@ -231,7 +244,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                               height: 5,
                             ),
                             Text(
-                              courses[0]["price"],
+                              widget.myObject.price.toString(),
                               style: TextStyle(color: Colors.white),
                             )
                           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:learnifyflutter/screen2.dart';
 
 import 'package:learnifyflutter/utilities/customimage.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 
 class FeatureItem extends StatelessWidget {
   FeatureItem(
@@ -16,6 +17,16 @@ class FeatureItem extends StatelessWidget {
   final double height;
   final GestureTapCallback? onTap;
 
+  String func() {
+    final profilePicpath = data.image.toString();
+    if (data.image.startsWith('public')) {
+      final profilePic = profilePicpath.substring(22, profilePicpath.length);
+      final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+      return imagePath;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -23,7 +34,7 @@ class FeatureItem extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => Screen2(),
+            builder: (_) => Screen2(myObject: data),
           ),
         );
       },
@@ -47,7 +58,7 @@ class FeatureItem extends StatelessWidget {
         child: Stack(
           children: [
             CustomImage(
-              data.image,
+              func(),
               width: double.infinity,
               height: 190,
               radius: 15,
@@ -100,7 +111,7 @@ class FeatureItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         getAttribute(Icons.play_circle_outlined,
-                            Color(0xFF8A8989), data.tag),
+                            Color(0xFF8A8989), data.nbrSeance.toString()),
                         SizedBox(
                           width: 12,
                         ),
@@ -109,7 +120,7 @@ class FeatureItem extends StatelessWidget {
                         SizedBox(
                           width: 12,
                         ),
-                        getAttribute(Icons.star, Color(0xFFffcb66), data.user),
+                        getAttribute(Icons.star, Color(0xFFffcb66), data.tag),
                       ],
                     ),
                   ],
