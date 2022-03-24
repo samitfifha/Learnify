@@ -47,7 +47,7 @@ class FeatureItem extends StatelessWidget {
         child: Stack(
           children: [
             CustomImage(
-              data["image"],
+              data.image,
               width: double.infinity,
               height: 190,
               radius: 15,
@@ -70,7 +70,7 @@ class FeatureItem extends StatelessWidget {
                   ],
                 ),
                 child: Text(
-                  data["price"],
+                  data.price.toString(),
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w500),
                 ),
@@ -85,7 +85,7 @@ class FeatureItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data["name"],
+                      data.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -100,17 +100,16 @@ class FeatureItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         getAttribute(Icons.play_circle_outlined,
-                            Color(0xFF8A8989), data["session"]),
+                            Color(0xFF8A8989), data.tag),
                         SizedBox(
                           width: 12,
                         ),
                         getAttribute(Icons.schedule_rounded, Color(0xFF8A8989),
-                            data["duration"]),
+                            data.nbrSeance.toString()),
                         SizedBox(
                           width: 12,
                         ),
-                        getAttribute(
-                            Icons.star, Color(0xFFffcb66), data["review"]),
+                        getAttribute(Icons.star, Color(0xFFffcb66), data.user),
                       ],
                     ),
                   ],

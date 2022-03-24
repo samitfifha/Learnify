@@ -3,7 +3,7 @@ List courses = [
     "id": 100,
     "name": "UI/UX Design",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1596638787647-904d822d751e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\TND 110.00",
     "duration": "10 hours",
     "session": "6 lessons",
@@ -16,7 +16,7 @@ List courses = [
     "id": 101,
     "name": "Programming",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$155.00",
     "duration": "20 hours",
     "session": "12 lessons",
@@ -29,7 +29,7 @@ List courses = [
     "id": 102,
     "name": "English Writing",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$65.00",
     "duration": "12 hours",
     "session": "4 lessons",
@@ -42,7 +42,7 @@ List courses = [
     "id": 103,
     "name": "Mix Salad",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$80.00",
     "duration": "4 hours",
     "session": "3 lessons",
@@ -55,7 +55,7 @@ List courses = [
     "id": 104,
     "name": "Guitar Class",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1549298240-0d8e60513026?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$125.00",
     "duration": "12 hours",
     "session": "4 lessons",
@@ -68,7 +68,7 @@ List courses = [
     "id": 105,
     "name": "Painting",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1596548438137-d51ea5c83ca5?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$65.00",
     "duration": "12 hours",
     "session": "8 lessons",
@@ -81,7 +81,7 @@ List courses = [
     "id": 106,
     "name": "Communication Skill",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$135.00",
     "duration": "6 hours",
     "session": "4 lessons",
@@ -94,7 +94,7 @@ List courses = [
     "id": 107,
     "name": "Caster",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1554446422-d05db23719d2?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$95.00",
     "duration": "8 hours",
     "session": "4 lessons",
@@ -107,7 +107,7 @@ List courses = [
     "id": 108,
     "name": "Management",
     "image":
-        "https://cdn.discordapp.com/attachments/782697628529197147/950336744841183242/attachment_101813880.jpg",
+        "https://images.unsplash.com/photo-1542626991-cbc4e32524cc?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTF8fGZhc2hpb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     "price": "\$75.00",
     "duration": "9 hours",
     "session": "5 lessons",

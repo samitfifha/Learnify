@@ -26,7 +26,6 @@ class CustomImage extends StatelessWidget {
   final double radius;
   final BorderRadiusGeometry? borderRadius;
   final BoxFit fit;
-
   @override
   Widget build(BuildContext context) {
     return Container(

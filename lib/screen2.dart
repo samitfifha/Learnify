@@ -84,7 +84,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                     child: Column(
                       children: [
                         CustomImage(
-                          courses[0]["image"],
+                          courses[1]["image"],
                           radius: 10,
                           width: double.infinity,
                           height: 200,

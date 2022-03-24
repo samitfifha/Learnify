@@ -44,7 +44,6 @@ List<BoxShadow> shadowList = [
   BoxShadow(color: Colors.grey[300]!, blurRadius: 30, offset: Offset(0, 10))
 ];
 List<Map> categories = [
-  {"name": 'All', 'iconPath': 'assets/images/all.png'},
   {'name': 'Coding', 'iconPath': 'assets/images/coding.png'},
   {'name': 'education', 'iconPath': 'assets/images/education.png'},
   {'name': 'design', 'iconPath': 'assets/images/design.png'},
