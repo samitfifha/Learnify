@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/Courses%20Screens/addLessons.dart';
 import 'package:learnifyflutter/Welcome%20Screens/splashscreen.dart';
 import 'package:learnifyflutter/testscreen.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: const SplachScreen(),
-      //body: TestScreen(data: "dd",),
+      //body: AddLessons(),
     );
   }
 }

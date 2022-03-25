@@ -27,10 +27,8 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
-    print(widget.myObject.lessons);
-    print(
-      widget.myObject.lessons[0]["title"],
-    );
+    //print(widget.myObject.lessons);
+    //print(widget.myObject.lessons[0]["title"],);
   }
 
   String func() {
@@ -115,6 +113,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                             children: [
                               Row(
                                 children: [
+                                  SizedBox(height: 50),
                                   Text(
                                     widget.myObject.title.toString(),
                                     style: TextStyle(
@@ -122,9 +121,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                         fontWeight: FontWeight.w400,
                                         color: Colors.white),
                                   ),
-                                  SizedBox(
-                                    width: 180,
-                                  ),
+                                  Spacer(),
                                   Icon(
                                     Icons.bookmark_add_outlined,
                                     color: Colors.white,
@@ -149,9 +146,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     widget.myObject.nbrSeance.toString(),
                                     style: TextStyle(color: Colors.white70),
                                   ),
-                                  SizedBox(
-                                    width: 65,
-                                  ),
+                                  Spacer(),
                                   Icon(
                                     Icons.schedule_outlined,
                                     color: Colors.white,
@@ -164,9 +159,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     widget.myObject.nbrSeance.toString(),
                                     style: TextStyle(color: Colors.white70),
                                   ),
-                                  SizedBox(
-                                    width: 65,
-                                  ),
+                                  Spacer(),
                                   Icon(
                                     Icons.star,
                                     color: Colors.yellow,
@@ -235,7 +228,12 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                           child:
                               TabBarView(controller: tabController, children: [
                             getlesson(),
-                            Text("data1"),
+                            Center(
+                                child: Text(
+                              "Coming Soon...",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 30),
+                            )),
                           ]),
                         ),
                         Container(
@@ -326,10 +324,6 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.myObject.lessons[index]["title"]),
-                SizedBox(
-                  height: 10,
-                ),
-                Text("lesson")
               ],
             ))
           ],

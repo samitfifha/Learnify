@@ -1,55 +1,36 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:async/async.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:learnifyflutter/Courses%20Screens/addLessons.dart';
+import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Courses%20Screens/choicetypescreen.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:file/file.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
-class FileCourseScreen extends StatefulWidget {
-  const FileCourseScreen({Key? key}) : super(key: key);
+class AddLessons extends StatefulWidget {
+  var courseid;
+  AddLessons({this.courseid});
 
   @override
-  State<FileCourseScreen> createState() => _FileCourseScreenState();
+  State<AddLessons> createState() => _AddLessonsState();
 }
 
-class _FileCourseScreenState extends State<FileCourseScreen> {
+class _AddLessonsState extends State<AddLessons> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  late String userid;
-  String? coursename;
-  String? coursedesc;
-  String? price;
-  String? tag;
-  String? Coursefile;
   late FilePickerResult? result;
+  String? Lessonfile;
+  String? lessonname;
 
   Future pickImage() async {
     result = await FilePicker.platform.pickFiles();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userid = prefs.getString("_id")!;
 
     if (result != null) {
-      Coursefile = result!.files.single.path;
+      Lessonfile = result!.files.single.path;
     } else {
       // User canceled the picker
     }
   }
-
-  final items = ['Coding', 'programming', 'languages', 'cretifed', 'math'];
-  final items1 = ['1 ', '2', '3', '4', '5', '6', '7', '8'];
-  String? value;
-  String _value = "";
-  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +76,7 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                             ),
                           ),
                           Text(
-                            'Video Courses',
+                            'Add Lesson',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -133,61 +114,6 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                       height: height * 0.70,
                                       child: ListView(
                                         children: [
-                                          InkWell(
-                                            onTap: () => pickImage(),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                    left: 20,
-                                                    right: 20,
-                                                    top: 10),
-                                                padding: EdgeInsets.only(
-                                                    left: 20, right: 20),
-                                                alignment: Alignment.center,
-                                                height: 54,
-                                                decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                        colors: [
-                                                          (Colors.green),
-                                                          (Colors.black)
-                                                        ],
-                                                        begin: Alignment
-                                                            .centerLeft,
-                                                        end: Alignment
-                                                            .centerRight),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          offset: Offset(0, 10),
-                                                          blurRadius: 50,
-                                                          color: Color(
-                                                              0xffEEEEEE)),
-                                                    ]),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "Add Image",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    SizedBox(width: 130),
-                                                    Icon(
-                                                      Icons.add,
-                                                      color: Colors.white,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Divider(
-                                            height: 15,
-                                            thickness: 2,
-                                          ),
                                           SizedBox(
                                             height: 10,
                                           ),
@@ -197,92 +123,18 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                                 Icons.dashboard_customize,
                                                 color: Colors.blueAccent,
                                               ),
-                                              hintText: "Course Name",
+                                              hintText: "Lesson Name",
                                             ),
                                             onChanged: (String? value) {
-                                              coursename = value;
+                                              lessonname = value;
                                             },
                                           ),
                                           SizedBox(height: 20),
-                                          TextFormField(
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            maxLines: null,
-                                            decoration: InputDecoration(
-                                              icon: Icon(
-                                                Icons.description,
-                                                color: Colors.blueAccent,
-                                              ),
-                                              hintText: "Course Description",
-                                            ),
-                                            onChanged: (String? value) {
-                                              coursedesc = value;
-                                            },
-                                          ),
                                           new SizedBox(
                                             height: 20.0,
                                           ),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 12, vertical: 2),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.blue),
-                                                borderRadius:
-                                                    BorderRadius.circular(12)),
-                                            child: DropdownButton<String>(
-                                              value: value,
-                                              icon: Icon(Icons.arrow_drop_down,
-                                                  color: Colors.black),
-                                              iconSize: 25,
-                                              isExpanded: true,
-                                              items: items
-                                                  .map(buildMenuItem)
-                                                  .toList(),
-                                              onChanged: (value) => setState(
-                                                  () => this.value = value),
-                                            ),
-                                          ),
                                           SizedBox(
                                             height: 15,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Flexible(
-                                                child: CheckboxListTile(
-                                                  title: const Text(
-                                                    "payed",
-                                                  ),
-                                                  value: isChecked,
-                                                  onChanged: (bool? value) {
-                                                    setState(() {
-                                                      isChecked = value!;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                              if (isChecked)
-                                                Flexible(
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                      icon: Icon(
-                                                        Icons.description,
-                                                        color:
-                                                            Colors.blueAccent,
-                                                      ),
-                                                      hintText: "price TND",
-                                                    ),
-                                                    onChanged: (String? value) {
-                                                      price = value;
-                                                    },
-                                                  ),
-                                                ),
-                                            ],
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(10.0),
@@ -336,20 +188,21 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                     ),
                                     InkWell(
                                       onTap: () async {
+                                        String id1 =
+                                            widget.courseid.substring(1);
+                                        String id2 =
+                                            id1.substring(0, id1.length - 1);
                                         var uri = Uri.parse(
-                                            BaseURL + "courses/new/" + userid);
+                                            BaseURL + "lessons/new/" + id2);
+                                        print(uri);
 
                                         var request =
                                             http.MultipartRequest('POST', uri);
-                                        request.fields['title'] = coursename!;
-                                        request.fields['description'] =
-                                            coursedesc!;
-                                        request.fields['nbrSeance'] = '1';
-                                        request.fields['tag'] = value!;
-                                        request.fields['price'] = price!;
+                                        request.fields['title'] = lessonname!;
+
                                         request.files.add(
                                             await http.MultipartFile.fromPath(
-                                                'image', Coursefile!));
+                                                'support', Lessonfile!));
                                         var response = await request.send();
                                         //print(response);
                                         response.stream
@@ -359,8 +212,8 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (_) => AddLessons(
-                                                  courseid: value.toString()),
+                                              builder: (_) =>
+                                                  AddLessons(courseid: id2),
                                             ),
                                           );
                                         });
