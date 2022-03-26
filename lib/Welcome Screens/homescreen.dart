@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:learnifyflutter/widgets/feature_item.dart';
 import 'package:learnifyflutter/widgets/recommend_item.dart';
@@ -12,6 +13,8 @@ import 'package:learnifyflutter/utilities/data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:learnifyflutter/Models/coursesModel.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:path/path.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isDrawerOpen = false;
   late Future<bool> fetchedCourses;
   List list = [];
+
   Future<bool> fetchcourses() async {
     http.Response response =
         await http.get(Uri.parse(BaseURL + "courses/")).then((response) async {
@@ -53,11 +57,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return true;
   }
 
+  getconn() async {
+    bool hasInternet = false;
+    await InternetConnectionChecker().onStatusChange.listen((event) {
+      if (hasInternet = event == InternetConnectionStatus.connected) {}
+      hasInternet = true;
+    });
+    if (hasInternet = false) {
+      showSimpleNotification(Text("No Connection"), background: Colors.red);
+    } else {
+      showSimpleNotification(Text("Connected"), background: Colors.green);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     fetchedCourses = fetchcourses();
     super.initState();
+    getconn();
   }
 
   @override
