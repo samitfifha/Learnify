@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:learnifyflutter/Models/CoursesModel.dart';
@@ -12,6 +13,8 @@ import 'package:readmore/readmore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:learnifyflutter/Models/coursesModel.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Screen2 extends StatefulWidget {
   var myObject;
@@ -25,8 +28,10 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   late Future<bool> fetchedLessons;
 
   void initState() {
+    Stripe.publishableKey = Stripekey;
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+
     //print(widget.myObject.lessons);
     //print(widget.myObject.lessons[0]["title"],);
   }
@@ -260,20 +265,62 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                               SizedBox(
                                 width: 5,
                               ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    left: 20, right: 20, top: 20),
-                                padding: EdgeInsets.only(left: 20, right: 20),
-                                alignment: Alignment.center,
-                                height: 55,
-                                width: 240,
-                                decoration: BoxDecoration(
-                                  color: Colors.lightBlue,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  "buy",
-                                  style: TextStyle(color: Colors.white),
+                              InkWell(
+                                onTap: () async {
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  var userid = prefs.getString("_id")!;
+                                  final url = Uri.parse(
+                                      BaseURL + "users/courses/" + userid);
+                                  Map<String, dynamic> body = {
+                                    "courseid": widget.myObject.id.toString(),
+                                  };
+                                  final response =
+                                      await http.post(url, body: body);
+                                  var jsonResponse = jsonDecode(response.body);
+                                  Map<String, dynamic> paymentIntentData =
+                                      jsonResponse;
+
+                                  if (paymentIntentData["paymentIntent"] !=
+                                          "" &&
+                                      paymentIntentData["paymentIntent"] !=
+                                          null) {
+                                    String _intent =
+                                        paymentIntentData["paymentIntent"];
+                                    await Stripe.instance.initPaymentSheet(
+                                      paymentSheetParameters:
+                                          SetupPaymentSheetParameters(
+                                        paymentIntentClientSecret: _intent,
+                                        applePay: false,
+                                        googlePay: false,
+                                        merchantCountryCode: "IN",
+                                        merchantDisplayName: "Test",
+                                        testEnv: false,
+                                        customerId:
+                                            paymentIntentData['customer'],
+                                        customerEphemeralKeySecret:
+                                            paymentIntentData['ephemeralKey'],
+                                      ),
+                                    );
+
+                                    await Stripe.instance.presentPaymentSheet();
+                                  }
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      left: 20, right: 20, top: 20),
+                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  alignment: Alignment.center,
+                                  height: 55,
+                                  width: 240,
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightBlue,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    "buy",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ],

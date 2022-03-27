@@ -1,3 +1,15 @@
+List categories1 = [
+  {"name": "All", "icon": "assets/images/all.png"},
+  {"name": "Coding", "icon": "assets/images/coding.png"},
+  {"name": "Education", "icon": "assets/images/education.png"},
+  {"name": "Design", "icon": "assets/images/design.png"},
+  {"name": "Business", "icon": "assets/images/business.png"},
+  {"name": "Cooking", "icon": 'assets/images/cooking.png'},
+  {"name": "Music", "icon": "assets/images/music.png"},
+  {"name": "Art", "icon": "assets/images/art.png"},
+  {"name": "Finance", "icon": "assets/images/finance.png"},
+];
+
 List courses = [
   {
     "id": 100,

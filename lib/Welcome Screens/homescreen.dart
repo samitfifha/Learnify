@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:learnifyflutter/explore.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:learnifyflutter/widgets/feature_item.dart';
 import 'package:learnifyflutter/widgets/recommend_item.dart';
@@ -124,7 +125,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isDrawerOpen = true;
                                   });
                                 }),
-                        InkWell(onTap: () {}, child: Icon(Icons.search)),
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ExploreScreen()));
+                            },
+                            child: Icon(Icons.search)),
                       ],
                     ),
                   ),

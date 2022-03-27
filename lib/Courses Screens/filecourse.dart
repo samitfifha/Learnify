@@ -346,7 +346,7 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                             coursedesc!;
                                         request.fields['nbrSeance'] = '1';
                                         request.fields['tag'] = value!;
-                                        request.fields['price'] = price!;
+                                        request.fields['price'] = price ?? '0';
                                         request.files.add(
                                             await http.MultipartFile.fromPath(
                                                 'image', Coursefile!));

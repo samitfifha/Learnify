@@ -1,30 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:learnifyflutter/Models/coursesModel.dart';
 import 'package:learnifyflutter/User%20Screens/editprofilescreen.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 
 import 'package:learnifyflutter/Welcome Screens/drawerscreen.dart';
 import 'package:learnifyflutter/Welcome Screens/mainscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  ProfileScreen({Key? key}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
   late String username;
   late String profilePicpath;
   late String profilePic;
   late String imagePath;
+  late TabController tabController;
+  late String userid;
+  late String coursepicpath;
+
+  List list = [];
+  List listsub = [];
+
+  Future<bool> fetchcourses() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("_id")!;
+    http.Response response = await http
+        .get(Uri.parse(BaseURL + "users/courses/" + userid))
+        .then((response) async {
+      //print(response.statusCode);
+      if (response.statusCode == 200) {
+        list = json
+            .decode(response.body)
+            .map((data) => Course.fromJson(data))
+            .toList();
+      }
+      return response;
+    });
+    return true;
+  }
+
+  Future<bool> fetchcoursesub() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString("_id")!;
+    http.Response response = await http
+        .get(Uri.parse(BaseURL + "users/subbedcourses/" + userid))
+        .then((response) async {
+      //print(response.statusCode);
+      if (response.statusCode == 200) {
+        listsub = json
+            .decode(response.body)
+            .map((data) => Course.fromJson(data))
+            .toList();
+      }
+      return response;
+    });
+    return true;
+  }
 
   late Future<bool> fetchedUser;
+  late Future<bool> fetchedCourses;
+  late Future<bool> fetchedCoursesub;
 
   Future<bool> fetchUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,11 +101,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return true;
   }
 
+  String func(index) {
+    final profilePicpath = list[index].image.toString();
+    if (list[index].image.startsWith('public')) {
+      final profilePic = profilePicpath.substring(22, profilePicpath.length);
+      final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+      return imagePath;
+    }
+    return '';
+  }
+
+  String funcsub(index) {
+    final profilePicpath = listsub[index].image.toString();
+    if (listsub[index].image.startsWith('public')) {
+      final profilePic = profilePicpath.substring(22, profilePicpath.length);
+      final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+      return imagePath;
+    }
+    return '';
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     fetchedUser = fetchUser();
+    fetchedCourses = fetchcourses();
+    fetchedCoursesub = fetchcoursesub();
+
     super.initState();
+    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -176,7 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      '10',
+                                                      list.length.toString(),
                                                       style: TextStyle(
                                                         color: Color.fromRGBO(
                                                             39, 105, 171, 1),
@@ -311,7 +382,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 10,
                           ),
                           Container(
-                            height: height * 0.5,
+                            height: height * 0.55,
                             width: width,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
@@ -336,30 +407,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Divider(
                                     thickness: 2.5,
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
                                   Container(
-                                    height: height * 0.15,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(30),
+                                    width: double.infinity,
+                                    child: TabBar(
+                                      controller: tabController,
+                                      tabs: [
+                                        Tab(
+                                          child: Text(
+                                            "My Courses",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                        Tab(
+                                          child: Text(
+                                            " My Subscribed Courses",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    height: height * 0.15,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
+                                    height: 300,
+                                    child: TabBarView(
+                                        controller: tabController,
+                                        children: [
+                                          getMyCourses(),
+                                          getMySubbedCourses(),
+                                        ]),
                                   ),
                                 ],
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -372,6 +456,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             })
       ],
+    );
+  }
+
+  Widget getMyCourses() {
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (context, index) => Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 5, bottom: 5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white70.withOpacity(.07),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: Offset(1, 1),
+              )
+            ]),
+        child: Row(
+          children: [
+            CustomImage(
+              func(index),
+              radius: 10,
+              width: 70,
+              height: 70,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(list[index].title),
+              ],
+            )),
+            Spacer(),
+            Icon(Icons.keyboard_arrow_right),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getMySubbedCourses() {
+    return ListView.builder(
+      itemCount: listsub.length,
+      itemBuilder: (context, index) => Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 5, bottom: 5),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white70.withOpacity(.07),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: Offset(1, 1),
+              )
+            ]),
+        child: Row(
+          children: [
+            CustomImage(
+              funcsub(index),
+              radius: 10,
+              width: 70,
+              height: 70,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(listsub[index].title),
+              ],
+            )),
+            Spacer(),
+            Icon(Icons.keyboard_arrow_right),
+          ],
+        ),
+      ),
     );
   }
 }
