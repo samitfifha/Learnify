@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:learnifyflutter/Courses%20Screens/addLessons.dart';
-import 'package:learnifyflutter/Courses%20Screens/choicetypescreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,8 +86,7 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChoiceTypeScreen()));
+                                      builder: (context) => MainScreen()));
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -95,7 +94,7 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                             ),
                           ),
                           Text(
-                            'Video Courses',
+                            'Add Course',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -253,7 +252,7 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                               Flexible(
                                                 child: CheckboxListTile(
                                                   title: const Text(
-                                                    "payed",
+                                                    "paid",
                                                   ),
                                                   value: isChecked,
                                                   onChanged: (bool? value) {
@@ -283,53 +282,6 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                                   ),
                                                 ),
                                             ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 20, right: 20, top: 10),
-                                              padding: EdgeInsets.only(
-                                                  left: 20, right: 20),
-                                              alignment: Alignment.center,
-                                              height: 54,
-                                              decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                        (Colors.green),
-                                                        (Colors.black)
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end: Alignment
-                                                          .centerRight),
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        offset: Offset(0, 10),
-                                                        blurRadius: 50,
-                                                        color:
-                                                            Color(0xffEEEEEE)),
-                                                  ]),
-                                              child: InkWell(
-                                                onTap: () => pickImage(),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "Add Files",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    SizedBox(width: 130),
-                                                    Icon(
-                                                      Icons.add,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
                                           ),
                                         ],
                                       ),

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/Courses%20Screens/choicetypescreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -32,8 +32,19 @@ class _AddLessonsState extends State<AddLessons> {
     }
   }
 
+  String checkid() {
+    if (widget.courseid.toString().length != 24) {
+      String id1 = widget.courseid.substring(1);
+      String id2 = id1.substring(0, id1.length - 1);
+      return id2;
+    } else {
+      return widget.courseid.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(checkid());
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Stack(
@@ -67,8 +78,7 @@ class _AddLessonsState extends State<AddLessons> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChoiceTypeScreen()));
+                                      builder: (context) => MainScreen()));
                             },
                             child: Icon(
                               Icons.arrow_back_ios,
@@ -188,12 +198,9 @@ class _AddLessonsState extends State<AddLessons> {
                                     ),
                                     InkWell(
                                       onTap: () async {
-                                        String id1 =
-                                            widget.courseid.substring(1);
-                                        String id2 =
-                                            id1.substring(0, id1.length - 1);
-                                        var uri = Uri.parse(
-                                            BaseURL + "lessons/new/" + id2);
+                                        var uri = Uri.parse(BaseURL +
+                                            "lessons/new/" +
+                                            checkid());
                                         print(uri);
 
                                         var request =
@@ -212,8 +219,8 @@ class _AddLessonsState extends State<AddLessons> {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (_) =>
-                                                  AddLessons(courseid: id2),
+                                              builder: (_) => AddLessons(
+                                                  courseid: checkid()),
                                             ),
                                           );
                                         });

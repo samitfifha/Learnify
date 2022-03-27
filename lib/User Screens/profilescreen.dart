@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:learnifyflutter/Courses%20Screens/addLessons.dart';
 import 'package:learnifyflutter/Models/coursesModel.dart';
 import 'package:learnifyflutter/User%20Screens/editprofilescreen.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
@@ -495,7 +496,18 @@ class _ProfileScreenState extends State<ProfileScreen>
               ],
             )),
             Spacer(),
-            Icon(Icons.keyboard_arrow_right),
+            InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          AddLessons(courseid: list[index].id.toString()),
+                    ),
+                  );
+                  print(list[index].id.toString());
+                },
+                child: Icon(Icons.keyboard_arrow_right)),
           ],
         ),
       ),

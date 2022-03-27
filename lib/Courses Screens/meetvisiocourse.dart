@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:learnifyflutter/Courses%20Screens/choicetypescreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:uuid/uuid.dart';
 
 class MeetCourseScreen extends StatefulWidget {
@@ -66,7 +66,7 @@ class _MeetCourseScreenState extends State<MeetCourseScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ChoiceTypeScreen()));
+                                    builder: (context) => MainScreen()));
                           },
                           child: Icon(
                             Icons.arrow_back_ios,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:learnifyflutter/Courses%20Screens/filecourse.dart';
 import 'package:learnifyflutter/User%20Screens/profilescreen.dart';
 import 'package:learnifyflutter/favoritescreen.dart';
 import 'package:learnifyflutter/forumscreen.dart';
@@ -7,8 +8,6 @@ import 'package:learnifyflutter/messagesscreen.dart';
 import 'package:learnifyflutter/screen2.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../Courses Screens/choicetypescreen.dart';
 
 class UnbordingContent {
   final String image;
@@ -63,7 +62,7 @@ List<Map> drawerItems = [
   {
     'icon': FontAwesomeIcons.plus,
     'title': 'Add course',
-    'screen': ChoiceTypeScreen()
+    'screen': FileCourseScreen()
   },
   {
     'icon': Icons.favorite_border,

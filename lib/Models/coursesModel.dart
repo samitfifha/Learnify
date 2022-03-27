@@ -41,7 +41,7 @@ class Course {
         description: description,
         nbrSeance: nbrSeance,
         tag: tag,
-        price: price ?? 0,
+        price: price,
         user: user,
         image: image,
         lessons: lessons);
