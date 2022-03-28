@@ -28,34 +28,44 @@ class _DrawerScreenState extends State<DrawerScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userid = prefs.getString("_id")!;
 
-    http.Response response = await http
-        .get(Uri.parse(BaseURL + "users/" + userid))
-        .then((response) async {
-      print(response.statusCode);
-      if (response.statusCode == 201) {
-        Map<String, dynamic> userData = json.decode(response.body);
+    try {
+      http.Response response = await http
+          .get(Uri.parse(BaseURL + "users/" + userid))
+          .then((response) async {
+        print(response.statusCode);
+        if (response.statusCode == 201) {
+          Map<String, dynamic> userData = json.decode(response.body);
 
-        username = userData["firstName"] + " " + userData["lastName"];
-        profilePicpath = userData["profilePic"];
-
-        if (profilePicpath.startsWith('public')) {
-          profilePic = profilePicpath.substring(22, profilePicpath.length);
-          imagePath = BaseURL + 'images/uploads/' + profilePic;
-        } else if (profilePicpath.startsWith('https')) {
+          username = userData["firstName"] + " " + userData["lastName"];
           profilePicpath = userData["profilePic"];
-          imagePath = profilePicpath;
+
+          if (profilePicpath.startsWith('public')) {
+            profilePic = profilePicpath.substring(22, profilePicpath.length);
+            imagePath = BaseURL + 'images/uploads/' + profilePic;
+          } else if (profilePicpath.startsWith('https')) {
+            profilePicpath = userData["profilePic"];
+            imagePath = profilePicpath;
+          }
+          //print(profilePic);
         }
-        //print(profilePic);
-      }
-      return response;
-    });
+        return response;
+      });
+    } catch (err) {
+      print(err);
+      return true;
+    }
     return true;
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    fetchedUser = fetchUser();
+    try {
+      fetchedUser = fetchUser();
+    } catch (err) {
+      print(err);
+    }
+
     super.initState();
   }
 

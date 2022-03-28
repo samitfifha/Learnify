@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:learnifyflutter/Welcome%20Screens/splashscreen.dart';
 import 'package:learnifyflutter/explore.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:learnifyflutter/widgets/feature_item.dart';
@@ -32,29 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
   List list = [];
 
   Future<bool> fetchcourses() async {
-    http.Response response =
-        await http.get(Uri.parse(BaseURL + "courses/")).then((response) async {
-      //print(response.statusCode);
-      if (response.statusCode == 200) {
-        list = json
-            .decode(response.body)
-            .map((data) => Course.fromJson(data))
-            .toList();
-
-        /*username = userData["firstName"] + " " + userData["lastName"];
-        profilePicpath = userData["profilePic"];
-
-        if (profilePicpath.startsWith('public')) {
-          profilePic = profilePicpath.substring(22, profilePicpath.length);
-          imagePath = BaseURL + 'images/uploads/' + profilePic;
-        } else if (profilePicpath.startsWith('https')) {
-          profilePicpath = userData["profilePic"];
-          imagePath = profilePicpath;
+    try {
+      http.Response response = await http
+          .get(Uri.parse(BaseURL + "courses/"))
+          .then((response) async {
+        //print(response.statusCode);
+        if (response.statusCode == 200) {
+          list = json
+              .decode(response.body)
+              .map((data) => Course.fromJson(data))
+              .toList();
         }
-        //print(profilePic);*/
-      }
-      return response;
-    });
+        return response;
+      });
+    } catch (err) {
+      print(err);
+      return true;
+    }
+
     return true;
   }
 
@@ -62,19 +59,34 @@ class _HomeScreenState extends State<HomeScreen> {
     bool hasInternet = false;
     await InternetConnectionChecker().onStatusChange.listen((event) {
       if (hasInternet = event == InternetConnectionStatus.connected) {}
-      hasInternet = true;
+      if (hasInternet == false) {
+        showSimpleNotification(Text("No Connection"), background: Colors.red);
+      } else {
+        showSimpleNotification(Text("Connected"), background: Colors.green);
+      }
     });
-    if (hasInternet = false) {
-      showSimpleNotification(Text("No Connection"), background: Colors.red);
-    } else {
-      showSimpleNotification(Text("Connected"), background: Colors.green);
-    }
+
+    // try {
+
+    //   final result = await InternetAddress.lookup('example.com');
+    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    //     showSimpleNotification(Text("Connected"), background: Colors.green);
+    //   }
+    // } on SocketException catch (_) {
+    //   showSimpleNotification(Text("No Connection"), background: Colors.red);
+    //   refresh();
+    // }
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    fetchedCourses = fetchcourses();
+    try {
+      fetchedCourses = fetchcourses();
+    } catch (err) {
+      print(err);
+    }
+
     super.initState();
     getconn();
   }

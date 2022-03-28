@@ -1,7 +1,16 @@
 import 'dart:io';
+import 'dart:async';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:learnifyflutter/widgets/pdf_viewer_page.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:footer/footer.dart';
 
 import 'package:jitsi_meet/jitsi_meet.dart';
@@ -12,6 +21,7 @@ import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:path/path.dart';
 import 'package:readmore/readmore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -63,6 +73,23 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
       return imagePath;
     }
     return '';
+  }
+
+  Future<File> loadNetwork(String url, index) async {
+    var uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final bytes = response.bodyBytes;
+
+    return _storeFile(url, bytes);
+  }
+
+  static Future<File> _storeFile(String url, List<int> bytes) async {
+    final filename = basename(url);
+    final dir = await getApplicationDocumentsDirectory();
+
+    final file = File('${dir.path}/$filename');
+    await file.writeAsBytes(bytes, flush: true);
+    return file;
   }
 
   joinmeeting(index) async {
@@ -400,10 +427,18 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
               )
             ]),
         child: InkWell(
-          onTap: () {
-            print(widget.myObject.lessons[index]["support"].toString());
+          onTap: () async {
+            print(funcV(widget.myObject.lessons[index]["support"].toString()));
             if (widget.myObject.lessons[index]["support"] == null) {
               joinmeeting(index);
+              return;
+            } else if (widget.myObject.lessons[index]["support"]
+                .toString()
+                .contains("pdf")) {
+              final file = await loadNetwork(
+                  funcV(widget.myObject.lessons[index]["support"].toString()),
+                  index);
+              openPDF(context, file);
               return;
             } else {
               print(
@@ -445,4 +480,8 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
       ),
     );
   }
+
+  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+      );
 }
