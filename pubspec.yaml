@@ -54,10 +54,10 @@ dependencies:
   footer: ^0.0.4
   internet_connection_checker: ^0.0.1+3
   overlay_support: ^1.2.1
-  flutter_stripe: 2.1.0
   video_player:
   chewie: ^1.3.1
   flutter_pdfview: ^1.2.2
+  flutter_stripe: ^2.4.0
 
 
   # The following adds the Cupertino Icons font to your application.

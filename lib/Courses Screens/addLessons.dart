@@ -234,8 +234,7 @@ class _AddLessonsState extends State<AddLessons> {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (_) => AddLessons(
-                                                  courseid: checkid()),
+                                              builder: (_) => MainScreen(),
                                             ),
                                           );
                                         });

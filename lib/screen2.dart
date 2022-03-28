@@ -47,7 +47,6 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   String username = '';
 
   void initState() {
-    Stripe.publishableKey = Stripekey;
     super.initState();
     tabController = TabController(length: 2, vsync: this);
 
