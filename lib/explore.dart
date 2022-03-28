@@ -1,14 +1,38 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/Models/coursesModel.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
+import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:learnifyflutter/widgets/category_item.dart';
+import 'package:http/http.dart' as http;
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+List list = [];
+
+fetchcourses(value) async {
+  http.Response response = await http
+      .get(Uri.parse(BaseURL + "courses/search/" + value))
+      .then((response) async {
+    //print(response.statusCode);
+    if (response.statusCode == 200) {
+      list = json
+          .decode(response.body)
+          .map((data) => Course.fromJson(data))
+          .toList();
+    }
+    return response;
+  });
+  return true;
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
@@ -71,6 +95,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         height: 20,
                       ),
                       getCategory(),
+                      SizedBox(
+                        height: 400,
+                        child: getMyCourses(),
+                      )
                     ],
                   ),
                 ),
@@ -99,6 +127,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         offset: Offset(0, 0))
                   ]),
               child: TextField(
+                onChanged: (value) {
+                  list.clear();
+                  fetchcourses(value);
+                  setState(() {});
+                },
                 decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.search,
@@ -121,7 +154,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               Icons.filter_list,
               color: Colors.white,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -146,4 +179,57 @@ class _ExploreScreenState extends State<ExploreScreen> {
       ),
     );
   }
+}
+
+String func(index) {
+  final profilePicpath = list[index].image.toString();
+  if (list[index].image.startsWith('public')) {
+    final profilePic = profilePicpath.substring(22, profilePicpath.length);
+    final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+    return imagePath;
+  }
+  return '';
+}
+
+Widget getMyCourses() {
+  return ListView.builder(
+    itemCount: list.length,
+    itemBuilder: (context, index) => Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 5, bottom: 5),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white70.withOpacity(.07),
+              spreadRadius: 1,
+              blurRadius: 1,
+              offset: Offset(1, 1),
+            )
+          ]),
+      child: Row(
+        children: [
+          CustomImage(
+            func(index),
+            radius: 10,
+            width: 70,
+            height: 70,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(list[index].title),
+            ],
+          )),
+          Spacer(),
+          InkWell(onTap: () {}, child: Icon(Icons.keyboard_arrow_right)),
+        ],
+      ),
+    ),
+  );
 }

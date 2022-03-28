@@ -7,6 +7,7 @@ import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 class AddLessons extends StatefulWidget {
   var courseid;
@@ -30,6 +31,14 @@ class _AddLessonsState extends State<AddLessons> {
     } else {
       // User canceled the picker
     }
+  }
+
+  String code = '';
+  String createcode() {
+    setState(() {
+      code = Uuid().v1().substring(0, 6);
+    });
+    return code;
   }
 
   String checkid() {
@@ -206,10 +215,16 @@ class _AddLessonsState extends State<AddLessons> {
                                         var request =
                                             http.MultipartRequest('POST', uri);
                                         request.fields['title'] = lessonname!;
+                                        request.fields['meetCode'] =
+                                            createcode();
 
-                                        request.files.add(
-                                            await http.MultipartFile.fromPath(
-                                                'support', Lessonfile!));
+                                        try {
+                                          request.files.add(
+                                              await http.MultipartFile.fromPath(
+                                                  'support', Lessonfile ?? ''));
+                                        } catch (error) {
+                                          print(error);
+                                        }
                                         var response = await request.send();
                                         //print(response);
                                         response.stream

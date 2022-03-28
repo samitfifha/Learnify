@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
+
+import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:learnifyflutter/Models/CoursesModel.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
+import 'package:learnifyflutter/chewie_list_item.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';
@@ -15,6 +18,7 @@ import 'dart:convert';
 import 'package:learnifyflutter/Models/coursesModel.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 
 class Screen2 extends StatefulWidget {
   var myObject;
@@ -26,6 +30,11 @@ class Screen2 extends StatefulWidget {
 class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late Future<bool> fetchedLessons;
+  TextEditingController namecontroller = TextEditingController();
+  TextEditingController roomcontroller = TextEditingController();
+  bool isVideoMuted = true;
+  bool isAudioMuted = true;
+  String username = '';
 
   void initState() {
     Stripe.publishableKey = Stripekey;
@@ -36,6 +45,16 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
     //print(widget.myObject.lessons[0]["title"],);
   }
 
+  String funcV(path) {
+    final profilePicpath = path;
+    if (profilePicpath.startsWith('public')) {
+      final profilePic = profilePicpath.substring(23, profilePicpath.length);
+      final imagePath = BaseURL + 'uploads/lessons/' + profilePic;
+      return imagePath;
+    }
+    return '';
+  }
+
   String func() {
     final profilePicpath = widget.myObject.image;
     if (profilePicpath.startsWith('public')) {
@@ -44,6 +63,31 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
       return imagePath;
     }
     return '';
+  }
+
+  joinmeeting(index) async {
+    try {
+      Map<FeatureFlagEnum, bool> feautueflags = {
+        FeatureFlagEnum.WELCOME_PAGE_ENABLED: false
+      };
+      if (Platform.isAndroid) {
+        feautueflags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
+      } else if (Platform.isIOS) {
+        feautueflags[FeatureFlagEnum.PIP_ENABLED] = false;
+      }
+
+      var options = JitsiMeetingOptions(
+          room: widget.myObject.lessons[index]["meetCode"].toString())
+        ..userDisplayName =
+            namecontroller.text == '' ? username : namecontroller.text
+        ..audioMuted = isAudioMuted
+        ..videoMuted = isVideoMuted
+        ..featureFlags.addAll(feautueflags);
+
+      await JitsiMeet.joinMeeting(options);
+    } catch (e) {
+      print("ERRor: $e");
+    }
   }
 
   @override
@@ -355,25 +399,48 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                 offset: Offset(1, 1),
               )
             ]),
-        child: Row(
-          children: [
-            CustomImage(
-              func(),
-              radius: 10,
-              width: 70,
-              height: 70,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.myObject.lessons[index]["title"]),
-              ],
-            ))
-          ],
+        child: InkWell(
+          onTap: () {
+            print(widget.myObject.lessons[index]["support"].toString());
+            if (widget.myObject.lessons[index]["support"] == null) {
+              joinmeeting(index);
+              return;
+            } else {
+              print(
+                  funcV(widget.myObject.lessons[index]["support"].toString()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Chewielistitem(
+                    videoPlayerController: VideoPlayerController.network(funcV(
+                        widget.myObject.lessons[index]["support"].toString())),
+                    looping: false,
+                    object: widget.myObject,
+                  ),
+                ),
+              );
+            }
+          },
+          child: Row(
+            children: [
+              CustomImage(
+                func(),
+                radius: 10,
+                width: 70,
+                height: 70,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.myObject.lessons[index]["title"]),
+                ],
+              ))
+            ],
+          ),
         ),
       ),
     );
