@@ -2,6 +2,10 @@ import 'dart:io';
 import 'dart:async';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+
+import 'package:square_in_app_payments/in_app_payments.dart';
+import 'package:square_in_app_payments/models.dart';
+
 import 'package:learnifyflutter/widgets/pdf_viewer_page.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,12 +25,13 @@ import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
+
 import 'package:path/path.dart';
 import 'package:readmore/readmore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:learnifyflutter/Models/coursesModel.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
@@ -46,12 +51,41 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   bool isAudioMuted = true;
   String username = '';
 
+  Future<void> _onStartCardEntryFlow() async {
+    await InAppPayments.startCardEntryFlow(
+        onCardNonceRequestSuccess: _onCardEntryCardNonceRequestSuccess,
+        onCardEntryCancel: _onCancelCardEntryFlow);
+  }
+
+  void _onCancelCardEntryFlow() {
+
+  }
+
+ 
+  void _onCardEntryCardNonceRequestSuccess(CardDetails result) async {
+    try {
+      chargeCard(result);
+      InAppPayments.completeCardEntry(
+          onCardEntryComplete: _onCardEntryComplete);
+    } on Exception catch (ex) {
+      // payment failed to complete due to error
+      // notify card entry to show processing error
+      InAppPayments.showCardNonceProcessingError(ex.toString());
+    }
+  }
+
+
+  void _onCardEntryComplete() {
+    // Update UI to notify user that the payment flow is finished successfully
+  }
+
+
+
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
-
-    //print(widget.myObject.lessons);
-    //print(widget.myObject.lessons[0]["title"],);
+    InAppPayments.setSquareApplicationId(
+        'sandbox-sq0idb-l8M5v3_UGiQiyvmoNPwTAQ');
   }
 
   String funcV(path) {
@@ -336,7 +370,33 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                 width: 5,
                               ),
                               InkWell(
-                                onTap: () async {},
+
+                                onTap: () async {
+                                  final bool check = await checksub();
+                                  if (check == false) {
+                                      _onStartCardEntryFlow();
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text("Warning"),
+                                            content: Text(
+                                                "You are already subscribed to this course"),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                child: Text("Ok"),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        });
+                                  }
+                                  
+                                },
+
                                 child: Container(
                                   margin: EdgeInsets.only(
                                       left: 20, right: 20, top: 20),
@@ -444,4 +504,45 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   void openPDF(BuildContext context, File file) => Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
       );
+
+  Future<String> chargeCard(CardDetails result) async {
+    SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      var userid = prefs.getString("_id")!;
+                                      final url = Uri.parse(
+                                          BaseURL + "users/courses/" + userid);
+                                      Map<String, dynamic> body = {
+                                        "courseid":
+                                            widget.myObject.id.toString(),
+                                        "nonce": result.nonce,
+                                      };
+                                      final response =
+                                          await http.post(url, body: body);
+
+                                      print(response.body.toString());
+                                      // get response status
+                                      final String statusCode =
+                                          response.statusCode.toString();
+                                          return statusCode;
+  }
+  Future<bool> checksub() async {
+    SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      var userid = prefs.getString("_id")!;
+                                      final url = Uri.parse(
+                                          BaseURL + "users/checksub/" + userid);
+                                      Map<String, dynamic> body = {
+                                        "courseid":
+                                            widget.myObject.id.toString(),
+                                      };
+                                      final response =
+                                          await http.post(url, body: body);
+
+                                      print(response.body.toString());
+                                      if (response.body.toString() == "true") {
+                                        return true;
+                                      } else {
+                                        return false;
+                                      }
+  }
 }
