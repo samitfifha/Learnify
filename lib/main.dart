@@ -15,8 +15,7 @@ import 'Welcome Screens/mainscreen.dart';
 import 'package:learnifyflutter/test.dart';
 import 'chewie_list_item.dart';
 
-void main() {
-  Stripe.publishableKey = Stripekey;
+void main() async {
   runApp(OverlaySupport.global(
     child: MaterialApp(
       home: MyApp(),

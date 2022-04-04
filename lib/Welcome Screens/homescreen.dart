@@ -93,156 +93,163 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: fetchedCourses,
-        builder: (context, snapshot) {
-          return AnimatedContainer(
-            transform: Matrix4.translationValues(xOffset, yOffset, 0)
-              ..scale(scaleFactor)
-              ..rotateY(isDrawerOpen ? -0.5 : 0),
-            duration: Duration(milliseconds: 250),
-            decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(isDrawerOpen ? 40 : 0.0)),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        isDrawerOpen
-                            ? IconButton(
-                                icon: Icon(Icons.arrow_back_ios),
-                                onPressed: () {
-                                  setState(() {
-                                    xOffset = 0;
-                                    yOffset = 0;
-                                    scaleFactor = 1;
-                                    isDrawerOpen = false;
-                                  });
-                                },
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.menu),
-                                onPressed: () {
-                                  setState(() {
-                                    xOffset = 230;
-                                    yOffset = 150;
-                                    scaleFactor = 0.6;
-                                    isDrawerOpen = true;
-                                  });
-                                }),
-                        InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ExploreScreen()));
-                            },
-                            child: Icon(Icons.search)),
-                      ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: FutureBuilder(
+          future: fetchedCourses,
+          builder: (context, snapshot) {
+            return AnimatedContainer(
+              transform: Matrix4.translationValues(xOffset, yOffset, 0)
+                ..scale(scaleFactor)
+                ..rotateY(isDrawerOpen ? -0.5 : 0),
+              duration: Duration(milliseconds: 250),
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(isDrawerOpen ? 40 : 0.0)),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 50,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "With learnify you'll find Courses in ",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          child: Column(
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          isDrawerOpen
+                              ? IconButton(
+                                  icon: Icon(Icons.arrow_back_ios),
+                                  onPressed: () {
+                                    setState(() {
+                                      xOffset = 0;
+                                      yOffset = 0;
+                                      scaleFactor = 1;
+                                      isDrawerOpen = false;
+                                    });
+                                  },
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.menu),
+                                  onPressed: () {
+                                    setState(() {
+                                      xOffset = 230;
+                                      yOffset = 150;
+                                      scaleFactor = 0.6;
+                                      isDrawerOpen = true;
+                                    });
+                                  }),
+                          InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ExploreScreen()));
+                              },
+                              child: Icon(Icons.search)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "With learnify you'll find Courses in ",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(left: 20),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: shadowList,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Image.asset(
+                                    categories[index]['iconPath'],
+                                    height: 50,
+                                    width: 50,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                Center(child: Text(categories[index]['name']))
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                                child: Text("Featured",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 24,
+                                    )),
+                              ),
+                              getFeature(),
+                              SizedBox(
+                                height: 15,
+                              ),
                               Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.only(left: 20),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: shadowList,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Image.asset(
-                                  categories[index]['iconPath'],
-                                  height: 50,
-                                  width: 50,
-                                  color: Colors.grey[700],
+                                margin: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Recommended",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                    Text(
+                                      "See all",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Center(child: Text(categories[index]['name']))
-                            ],
-                          ),
-                        );
-                      },
+                              getRecommend(),
+                            ]),
+                      ),
                     ),
-                  ),
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
-                              child: Text("Featured",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 24,
-                                  )),
-                            ),
-                            getFeature(),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(15, 0, 15, 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Recommended",
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    "See all",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            getRecommend(),
-                          ]),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  )
-                ],
+                    SizedBox(
+                      height: 50,
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   getRecommend() {

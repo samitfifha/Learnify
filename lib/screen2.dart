@@ -336,46 +336,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                 width: 5,
                               ),
                               InkWell(
-                                onTap: () async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  var userid = prefs.getString("_id")!;
-                                  final url = Uri.parse(
-                                      BaseURL + "users/courses/" + userid);
-                                  Map<String, dynamic> body = {
-                                    "courseid": widget.myObject.id.toString(),
-                                  };
-                                  final response =
-                                      await http.post(url, body: body);
-                                  var jsonResponse = jsonDecode(response.body);
-                                  Map<String, dynamic> paymentIntentData =
-                                      jsonResponse;
-
-                                  if (paymentIntentData["paymentIntent"] !=
-                                          "" &&
-                                      paymentIntentData["paymentIntent"] !=
-                                          null) {
-                                    String _intent =
-                                        paymentIntentData["paymentIntent"];
-                                    await Stripe.instance.initPaymentSheet(
-                                      paymentSheetParameters:
-                                          SetupPaymentSheetParameters(
-                                        paymentIntentClientSecret: _intent,
-                                        applePay: false,
-                                        googlePay: false,
-                                        merchantCountryCode: "IN",
-                                        merchantDisplayName: "Test",
-                                        testEnv: false,
-                                        customerId:
-                                            paymentIntentData['customer'],
-                                        customerEphemeralKeySecret:
-                                            paymentIntentData['ephemeralKey'],
-                                      ),
-                                    );
-
-                                    await Stripe.instance.presentPaymentSheet();
-                                  }
-                                },
+                                onTap: () async {},
                                 child: Container(
                                   margin: EdgeInsets.only(
                                       left: 20, right: 20, top: 20),

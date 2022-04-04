@@ -160,11 +160,20 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                   SizedBox(
                                     width: 20,
                                   ),
-                                  Text(element['title'],
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20))
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  element['screen']));
+                                    },
+                                    child: Text(element['title'],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20)),
+                                  )
                                 ],
                               ),
                             ))
