@@ -496,18 +496,49 @@ class _ProfileScreenState extends State<ProfileScreen>
               ],
             )),
             Spacer(),
-            InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          AddLessons(courseid: list[index].id.toString()),
-                    ),
-                  );
-                  print(list[index].id.toString());
-                },
-                child: Icon(Icons.keyboard_arrow_right)),
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AddLessons(
+                                  courseid: list[index].id.toString()),
+                            ),
+                          );
+                          print(list[index].id.toString());
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.add),
+                            SizedBox(width: 5),
+                            Text('Add Lesson')
+                          ],
+                        ),
+                      )),
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          Icon(Icons.book),
+                          SizedBox(width: 5),
+                          Text('View Course')
+                        ],
+                      )),
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 5),
+                          Text('Delete Course')
+                        ],
+                      )),
+                    ],
+                child: Icon(Icons.more_vert)),
           ],
         ),
       ),
@@ -550,7 +581,29 @@ class _ProfileScreenState extends State<ProfileScreen>
               ],
             )),
             Spacer(),
-            Icon(Icons.keyboard_arrow_right),
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          Icon(Icons.book),
+                          SizedBox(width: 5),
+                          Text('View Course')
+                        ],
+                      )),
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 5),
+                          Text('Unsubscribe Course')
+                        ],
+                      )),
+                    ],
+                child: Icon(Icons.more_vert)),
           ],
         ),
       ),

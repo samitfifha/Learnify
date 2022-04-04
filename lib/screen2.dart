@@ -370,6 +370,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                 width: 5,
                               ),
                               InkWell(
+
                                 onTap: () async {
                                   final bool check = await checksub();
                                   if (check == false) {
@@ -395,6 +396,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                   }
                                   
                                 },
+
                                 child: Container(
                                   margin: EdgeInsets.only(
                                       left: 20, right: 20, top: 20),
