@@ -152,6 +152,10 @@ class _AddLessonsState extends State<AddLessons> {
                                           new SizedBox(
                                             height: 20.0,
                                           ),
+                                          Center(
+                                            child: Text(
+                                                "Please note that in case of none choosen file, the lesson will be added as VisioConference Meeting"),
+                                          ),
                                           SizedBox(
                                             height: 15,
                                           ),

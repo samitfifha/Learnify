@@ -57,11 +57,8 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
         onCardEntryCancel: _onCancelCardEntryFlow);
   }
 
-  void _onCancelCardEntryFlow() {
+  void _onCancelCardEntryFlow() {}
 
-  }
-
- 
   void _onCardEntryCardNonceRequestSuccess(CardDetails result) async {
     try {
       chargeCard(result);
@@ -74,12 +71,9 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
     }
   }
 
-
   void _onCardEntryComplete() {
     // Update UI to notify user that the payment flow is finished successfully
   }
-
-
 
   void initState() {
     super.initState();
@@ -370,11 +364,10 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                 width: 5,
                               ),
                               InkWell(
-
                                 onTap: () async {
                                   final bool check = await checksub();
                                   if (check == false) {
-                                      _onStartCardEntryFlow();
+                                    _onStartCardEntryFlow();
                                   } else {
                                     showDialog(
                                         context: context,
@@ -394,9 +387,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                           );
                                         });
                                   }
-                                  
                                 },
-
                                 child: Container(
                                   margin: EdgeInsets.only(
                                       left: 20, right: 20, top: 20),
@@ -506,43 +497,35 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
       );
 
   Future<String> chargeCard(CardDetails result) async {
-    SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      var userid = prefs.getString("_id")!;
-                                      final url = Uri.parse(
-                                          BaseURL + "users/courses/" + userid);
-                                      Map<String, dynamic> body = {
-                                        "courseid":
-                                            widget.myObject.id.toString(),
-                                        "nonce": result.nonce,
-                                      };
-                                      final response =
-                                          await http.post(url, body: body);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userid = prefs.getString("_id")!;
+    final url = Uri.parse(BaseURL + "users/courses/" + userid);
+    Map<String, dynamic> body = {
+      "courseid": widget.myObject.id.toString(),
+      "nonce": result.nonce,
+    };
+    final response = await http.post(url, body: body);
 
-                                      print(response.body.toString());
-                                      // get response status
-                                      final String statusCode =
-                                          response.statusCode.toString();
-                                          return statusCode;
+    //print(response.body.toString());
+    // get response status
+    final String statusCode = response.statusCode.toString();
+    return statusCode;
   }
-  Future<bool> checksub() async {
-    SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      var userid = prefs.getString("_id")!;
-                                      final url = Uri.parse(
-                                          BaseURL + "users/checksub/" + userid);
-                                      Map<String, dynamic> body = {
-                                        "courseid":
-                                            widget.myObject.id.toString(),
-                                      };
-                                      final response =
-                                          await http.post(url, body: body);
 
-                                      print(response.body.toString());
-                                      if (response.body.toString() == "true") {
-                                        return true;
-                                      } else {
-                                        return false;
-                                      }
+  Future<bool> checksub() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userid = prefs.getString("_id")!;
+    final url = Uri.parse(BaseURL + "users/checksub/" + userid);
+    Map<String, dynamic> body = {
+      "courseid": widget.myObject.id.toString(),
+    };
+    final response = await http.post(url, body: body);
+
+    print(response.body.toString());
+    if (response.body.toString() == "true") {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
