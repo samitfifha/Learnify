@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:learnifyflutter/widgets/custom_dialog_basic.dart';
 
 import 'package:square_in_app_payments/in_app_payments.dart';
 import 'package:square_in_app_payments/models.dart';
@@ -372,22 +373,11 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.0)),
-                                            title: Text("Warning"),
-                                            content: Text(
-                                                "You are already subscribed to this course"),
-                                            actions: <Widget>[
-                                              ElevatedButton(
-                                                child: Text("Ok"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
+                                          return CustomAlertDialog2(
+                                            title:
+                                                "You have already subscribed",
+                                            description:
+                                                "You are already subscribed to this course",
                                           );
                                         });
                                   }

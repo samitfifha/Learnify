@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
-class CustomAlertDialog extends StatefulWidget {
-  const CustomAlertDialog({
+class CustomAlertDialog2 extends StatefulWidget {
+  const CustomAlertDialog2({
     Key? key,
     required this.title,
     required this.description,
-    this.ontap,
   }) : super(key: key);
 
   final String title, description;
-  final GestureTapCallback? ontap;
 
   @override
-  _CustomAlertDialogState createState() => _CustomAlertDialogState();
+  _CustomAlertDialog2State createState() => _CustomAlertDialog2State();
 }
 
-class _CustomAlertDialogState extends State<CustomAlertDialog> {
+class _CustomAlertDialog2State extends State<CustomAlertDialog2> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -28,9 +26,9 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/log-out.png',
-            height: 30,
-            width: 30,
+            'assets/oupss.png',
+            height: 100,
+            width: 100,
           ),
           SizedBox(height: 15),
           Text(
@@ -45,23 +43,6 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
           SizedBox(height: 20),
           Divider(
             height: 1,
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            child: GestureDetector(
-              onTap: widget.ontap,
-              child: Center(
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
           ),
           Divider(
             height: 1,
@@ -80,11 +61,11 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
               },
               child: Center(
                 child: Text(
-                  "Cancel",
+                  "Okay",
                   style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.blue),
                 ),
               ),
             ),
