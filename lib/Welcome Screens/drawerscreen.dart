@@ -213,24 +213,27 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       SizedBox(
                         width: 10,
                       ),
-                      GestureDetector(
-                        onTap: () => CustomAlertDialog(
-                          title: "Logout",
-                          description: "Are you sure you want to logout",
-                          ontap: () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.remove("_id");
-                            print("zab");
-
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const LoginScreen(),
-                              ),
-                            );
-                          },
-                        ),
+                      InkWell(
+                        onTap: () => showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomAlertDialog(
+                                title: "Logout",
+                                description:
+                                    "Are you sure you want to logout ?",
+                                ontap: () async {
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  prefs.remove("_id");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const LoginScreen(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }),
                         child: Text(
                           'Log out',
                           style: TextStyle(

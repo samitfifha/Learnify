@@ -5,11 +5,11 @@ class CustomAlertDialog extends StatefulWidget {
     Key? key,
     required this.title,
     required this.description,
-    required this.ontap,
+    this.ontap,
   }) : super(key: key);
 
   final String title, description;
-  final GestureTapCallback ontap;
+  final GestureTapCallback? ontap;
 
   @override
   _CustomAlertDialogState createState() => _CustomAlertDialogState();
