@@ -138,320 +138,330 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.teal, Colors.indigo],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await fetchedUser;
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.teal, Colors.indigo],
+              ),
             ),
           ),
-        ),
-        FutureBuilder(
-            future: fetchedUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Form(
-                    key: _formkey,
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 73),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfileScreen()));
-                                  },
-                                  child: Icon(
-                                    Icons.arrow_back_ios,
-                                    color: Colors.white,
+          FutureBuilder(
+              future: fetchedUser,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Form(
+                      key: _formkey,
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 73),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProfileScreen()));
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Edit Profile',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontFamily: 'Nisebuschgardens',
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SettingScreen()));
+                                    },
+                                    child: Icon(
+                                      Icons.logout,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Center(
+                                child: Container(
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 4,
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  spreadRadius: 2,
+                                                  blurRadius: 10,
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  offset: Offset(0, 10))
+                                            ],
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                  imagePath,
+                                                ))),
+                                      ),
+                                      InkWell(
+                                        onTap: () => pickImage(),
+                                        child: Positioned(
+                                            bottom: 0,
+                                            right: 0,
+                                            child: Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  width: 2,
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor,
+                                                ),
+                                                color: Colors.green,
+                                              ),
+                                              child: Icon(
+                                                Icons.edit,
+                                                color: Colors.white,
+                                              ),
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  'Edit Profile',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontFamily: 'Nisebuschgardens',
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SettingScreen()));
-                                  },
-                                  child: Icon(
-                                    Icons.logout,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Center(
-                              child: Container(
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Center(
                                 child: Stack(
                                   children: [
-                                    Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 4,
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                spreadRadius: 2,
-                                                blurRadius: 10,
-                                                color: Colors.black
-                                                    .withOpacity(0.1),
-                                                offset: Offset(0, 10))
-                                          ],
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                imagePath,
-                                              ))),
+                                    SizedBox(
+                                      height: 20,
                                     ),
-                                    InkWell(
-                                      onTap: () => pickImage(),
-                                      child: Positioned(
-                                          bottom: 0,
-                                          right: 0,
-                                          child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                width: 2,
-                                                color: Theme.of(context)
-                                                    .scaffoldBackgroundColor,
+                                    Container(
+                                      height: height * 0.7,
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: Colors.white,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              height: 25,
+                                            ),
+                                            Container(
+                                              height: height * 0.65,
+                                              child: Column(
+                                                children: [
+                                                  buildTextFormField(
+                                                      firstnameContoller,
+                                                      "First Name",
+                                                      firstName,
+                                                      false),
+                                                  buildTextFormField(
+                                                      lastnameController,
+                                                      "Last Name",
+                                                      lastName,
+                                                      false),
+                                                  buildTextFormField(
+                                                      emailController,
+                                                      "E-mail",
+                                                      email,
+                                                      false),
+                                                  buildTextFormField(
+                                                      birthdateController,
+                                                      "Birth Date",
+                                                      birthDate,
+                                                      false),
+                                                  buildTextFormField(
+                                                      degreeController,
+                                                      "degree",
+                                                      degree,
+                                                      false),
+                                                  buildTextFormField(
+                                                      jobController,
+                                                      "Job",
+                                                      job,
+                                                      false),
+                                                  buildTextFormField(
+                                                      phonenumbercontroller,
+                                                      "Phone",
+                                                      phone,
+                                                      false)
+                                                ],
                                               ),
-                                              color: Colors.green,
                                             ),
-                                            child: Icon(
-                                              Icons.edit,
-                                              color: Colors.white,
-                                            ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 10, right: 10, top: 20),
+                                      padding:
+                                          EdgeInsets.only(left: 55, right: 55),
+                                      alignment: Alignment.center,
+                                      height: 45,
+                                      width: 160,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Text(
+                                        "Cancel",
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: 10, right: 10, top: 20),
+                                      alignment: Alignment.center,
+                                      width: 160,
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              (new Color(0xff4B0082)),
+                                              (new Color(0xff00FFFF))
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          if (_formkey.currentState!
+                                              .validate()) {
+                                            _formkey.currentState!.save();
+
+                                            Map<String, String> headers = {
+                                              "Content-Type":
+                                                  "application/json; charset=utf-8"
+                                            };
+                                            Map<String, dynamic> body = {
+                                              "firstName":
+                                                  firstnameContoller.text,
+                                              "lastName":
+                                                  lastnameController.text,
+                                              "email": emailController.text,
+                                              "birthdate":
+                                                  birthdateController.text,
+                                              "degree": degreeController.text,
+                                              "job": jobController.text,
+                                              "phone":
+                                                  phonenumbercontroller.text,
+                                            };
+                                            http
+                                                .put(
+                                                    Uri.parse(BaseURL +
+                                                        "users/" +
+                                                        userid),
+                                                    headers: headers,
+                                                    body: json.encode(body))
+                                                .then((response) async {
+                                              print(response.statusCode);
+                                              if (response.statusCode == 200) {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        ProfileScreen(),
+                                                  ),
+                                                );
+                                                //Navigator.pushReplacementNamed(context, "/home");
+                                                print("success login");
+                                              } else {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return const AlertDialog(
+                                                        title: Text(
+                                                            "Informations"),
+                                                        content: Text(
+                                                            "Email et/ou mot de passe invalides"),
+                                                      );
+                                                    });
+                                              }
+                                            });
+                                          }
+                                        },
+                                        child: Text(
+                                          "Save",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Center(
-                              child: Stack(
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    height: height * 0.7,
-                                    width: width,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          SizedBox(
-                                            height: 25,
-                                          ),
-                                          Container(
-                                            height: height * 0.65,
-                                            child: Column(
-                                              children: [
-                                                buildTextFormField(
-                                                    firstnameContoller,
-                                                    "First Name",
-                                                    firstName,
-                                                    false),
-                                                buildTextFormField(
-                                                    lastnameController,
-                                                    "Last Name",
-                                                    lastName,
-                                                    false),
-                                                buildTextFormField(
-                                                    emailController,
-                                                    "E-mail",
-                                                    email,
-                                                    false),
-                                                buildTextFormField(
-                                                    birthdateController,
-                                                    "Birth Date",
-                                                    birthDate,
-                                                    false),
-                                                buildTextFormField(
-                                                    degreeController,
-                                                    "degree",
-                                                    degree,
-                                                    false),
-                                                buildTextFormField(
-                                                    jobController,
-                                                    "Job",
-                                                    job,
-                                                    false),
-                                                buildTextFormField(
-                                                    phonenumbercontroller,
-                                                    "Phone",
-                                                    phone,
-                                                    false)
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 10, right: 10, top: 20),
-                                    padding:
-                                        EdgeInsets.only(left: 55, right: 55),
-                                    alignment: Alignment.center,
-                                    height: 45,
-                                    width: 160,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.red),
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: Text(
-                                      "Cancel",
-                                      style: TextStyle(color: Colors.redAccent),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 10, right: 10, top: 20),
-                                    alignment: Alignment.center,
-                                    width: 160,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            (new Color(0xff4B0082)),
-                                            (new Color(0xff00FFFF))
-                                          ],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight),
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        if (_formkey.currentState!.validate()) {
-                                          _formkey.currentState!.save();
-
-                                          Map<String, String> headers = {
-                                            "Content-Type":
-                                                "application/json; charset=utf-8"
-                                          };
-                                          Map<String, dynamic> body = {
-                                            "firstName":
-                                                firstnameContoller.text,
-                                            "lastName": lastnameController.text,
-                                            "email": emailController.text,
-                                            "birthdate":
-                                                birthdateController.text,
-                                            "degree": degreeController.text,
-                                            "job": jobController.text,
-                                            "phone": phonenumbercontroller.text,
-                                          };
-                                          http
-                                              .put(
-                                                  Uri.parse(BaseURL +
-                                                      "users/" +
-                                                      userid),
-                                                  headers: headers,
-                                                  body: json.encode(body))
-                                              .then((response) async {
-                                            print(response.statusCode);
-                                            if (response.statusCode == 200) {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      ProfileScreen(),
-                                                ),
-                                              );
-                                              //Navigator.pushReplacementNamed(context, "/home");
-                                              print("success login");
-                                            } else {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return const AlertDialog(
-                                                      title:
-                                                          Text("Informations"),
-                                                      content: Text(
-                                                          "Email et/ou mot de passe invalides"),
-                                                    );
-                                                  });
-                                            }
-                                          });
-                                        }
-                                      },
-                                      child: Text(
-                                        "Save",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            })
-      ],
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              })
+        ],
+      ),
     );
   }
 

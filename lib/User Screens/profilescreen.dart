@@ -128,6 +128,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     fetchedUser = fetchUser();
     fetchedCourses = fetchcourses();
     fetchedCoursesub = fetchcoursesub();
+    getMyCourses();
+    getMySubbedCourses();
 
     super.initState();
     tabController = TabController(length: 2, vsync: this);
@@ -137,326 +139,337 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.teal, Colors.indigo],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await fetchedUser;
+        await fetchedCourses;
+        await fetchedCoursesub;
+        setState(() {});
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.teal, Colors.indigo],
+              ),
             ),
           ),
-        ),
-        FutureBuilder(
-            future: fetchedUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 73),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MainScreen()));
-                                },
-                                child: Icon(
-                                  Icons.arrow_back_ios,
+          FutureBuilder(
+              future: fetchedUser,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 73),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MainScreen()));
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'My Profile',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontFamily: 'Nisebuschgardens',
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.logout,
                                   color: Colors.white,
                                 ),
-                              ),
-                              Text(
-                                'My Profile',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontFamily: 'Nisebuschgardens',
-                                ),
-                              ),
-                              Icon(
-                                Icons.logout,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            height: height * 0.34,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                double innerHeight = constraints.maxHeight;
-                                double innerWidth = constraints.maxWidth;
-                                return Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    Positioned(
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: Container(
-                                        height: innerHeight * 0.69,
-                                        width: innerWidth,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          color: Colors.white,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 30,
-                                            ),
-                                            Text(
-                                              username,
-                                              style: TextStyle(
-                                                color: Color.fromRGBO(
-                                                    39, 105, 171, 1),
-                                                fontFamily: 'Nunito',
-                                                fontSize: 25,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 0,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      'Courses',
-                                                      style: TextStyle(
-                                                        color: Colors.grey[700],
-                                                        fontFamily: 'Nunito',
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      list.length.toString(),
-                                                      style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            39, 105, 171, 1),
-                                                        fontFamily: 'Nunito',
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 50,
-                                                    vertical: 8,
-                                                  ),
-                                                  child: Container(
-                                                    height: 50,
-                                                    width: 3,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                      'Rates',
-                                                      style: TextStyle(
-                                                        color: Colors.grey[700],
-                                                        fontFamily: 'Nunito',
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                          size: 15,
-                                                        ),
-                                                        Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                          size: 15,
-                                                        ),
-                                                        Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                          size: 15,
-                                                        ),
-                                                        Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                          size: 15,
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: Center(
+                              ],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              height: height * 0.34,
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  double innerHeight = constraints.maxHeight;
+                                  double innerWidth = constraints.maxWidth;
+                                  return Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      Positioned(
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
                                         child: Container(
-                                          width: 100,
-                                          height: 100,
+                                          height: innerHeight * 0.69,
+                                          width: innerWidth,
                                           decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 3,
-                                                  color: Theme.of(context)
-                                                      .scaffoldBackgroundColor),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    spreadRadius: 2,
-                                                    blurRadius: 10,
-                                                    color: Colors.black
-                                                        .withOpacity(0.1),
-                                                    offset: Offset(0, 10))
-                                              ],
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                    imagePath,
-                                                  ))),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            color: Colors.white,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              Text(
+                                                username,
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      39, 105, 171, 1),
+                                                  fontFamily: 'Nunito',
+                                                  fontSize: 25,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 0,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        'Courses',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[700],
+                                                          fontFamily: 'Nunito',
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        list.length.toString(),
+                                                        style: TextStyle(
+                                                          color: Color.fromRGBO(
+                                                              39, 105, 171, 1),
+                                                          fontFamily: 'Nunito',
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 50,
+                                                      vertical: 8,
+                                                    ),
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: 3,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                        'Rates',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.grey[700],
+                                                          fontFamily: 'Nunito',
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                            size: 15,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                            size: 15,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                            size: 15,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                            size: 15,
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Positioned(
-                                      top: 110,
-                                      right: 20,
-                                      child: Icon(
-                                        Icons.settings,
-                                        color: Colors.grey[700],
-                                        size: 30,
+                                      Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        child: Center(
+                                          child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 3,
+                                                    color: Theme.of(context)
+                                                        .scaffoldBackgroundColor),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      spreadRadius: 2,
+                                                      blurRadius: 10,
+                                                      color: Colors.black
+                                                          .withOpacity(0.1),
+                                                      offset: Offset(0, 10))
+                                                ],
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                      imagePath,
+                                                    ))),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    Positioned(
-                                      top: 110,
-                                      left: 20,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProfileScreen()));
-                                        },
+                                      Positioned(
+                                        top: 110,
+                                        right: 20,
                                         child: Icon(
-                                          Icons.edit,
+                                          Icons.settings,
                                           color: Colors.grey[700],
                                           size: 30,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: height * 0.55,
-                            width: width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    'My courses',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(39, 105, 171, 1),
-                                      fontSize: 27,
-                                      fontFamily: 'Nunito',
-                                    ),
-                                  ),
-                                  Divider(
-                                    thickness: 2.5,
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    child: TabBar(
-                                      controller: tabController,
-                                      tabs: [
-                                        Tab(
-                                          child: Text(
-                                            "My Courses",
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                      Positioned(
+                                        top: 110,
+                                        left: 20,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProfileScreen()));
+                                          },
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Colors.grey[700],
+                                            size: 30,
                                           ),
                                         ),
-                                        Tab(
-                                          child: Text(
-                                            " My Subscribed Courses",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 300,
-                                    child: TabBarView(
-                                        controller: tabController,
-                                        children: [
-                                          getMyCourses(),
-                                          getMySubbedCourses(),
-                                        ]),
-                                  ),
-                                ],
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: height * 0.55,
+                              width: width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'My courses',
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(39, 105, 171, 1),
+                                        fontSize: 27,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 2.5,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      child: TabBar(
+                                        controller: tabController,
+                                        tabs: [
+                                          Tab(
+                                            child: Text(
+                                              "My Courses",
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Tab(
+                                            child: Text(
+                                              " My Subscribed Courses",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      child: TabBarView(
+                                          controller: tabController,
+                                          children: [
+                                            getMyCourses(),
+                                            getMySubbedCourses(),
+                                          ]),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            })
-      ],
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              })
+        ],
+      ),
     );
   }
 
