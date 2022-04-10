@@ -213,7 +213,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       SizedBox(
                         width: 10,
                       ),
-                      InkWell(
+                      GestureDetector(
                         onTap: () => CustomAlertDialog(
                           title: "Logout",
                           description: "Are you sure you want to logout",
@@ -221,6 +221,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             prefs.remove("_id");
+                            print("zab");
 
                             Navigator.pushReplacement(
                               context,

@@ -9,7 +9,7 @@ class CustomAlertDialog extends StatefulWidget {
   }) : super(key: key);
 
   final String title, description;
-  final Function ontap;
+  final GestureTapCallback ontap;
 
   @override
   _CustomAlertDialogState createState() => _CustomAlertDialogState();
@@ -44,12 +44,8 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 50,
-            child: InkWell(
-              highlightColor: Colors.grey[200],
-              onTap: () {
-                //do somethig
-                widget.ontap;
-              },
+            child: GestureDetector(
+              onTap: widget.ontap,
               child: Center(
                 child: Text(
                   "Continue",
