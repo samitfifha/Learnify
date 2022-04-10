@@ -373,11 +373,15 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
                                             title: Text("Warning"),
                                             content: Text(
                                                 "You are already subscribed to this course"),
                                             actions: <Widget>[
-                                              FlatButton(
+                                              ElevatedButton(
                                                 child: Text("Ok"),
                                                 onPressed: () {
                                                   Navigator.pop(context);
