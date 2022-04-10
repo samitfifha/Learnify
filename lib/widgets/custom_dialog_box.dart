@@ -5,9 +5,11 @@ class CustomAlertDialog extends StatefulWidget {
     Key? key,
     required this.title,
     required this.description,
+    required this.ontap,
   }) : super(key: key);
 
   final String title, description;
+  final Function ontap;
 
   @override
   _CustomAlertDialogState createState() => _CustomAlertDialogState();
@@ -46,6 +48,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
               highlightColor: Colors.grey[200],
               onTap: () {
                 //do somethig
+                widget.ontap;
               },
               child: Center(
                 child: Text(

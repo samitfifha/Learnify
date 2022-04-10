@@ -97,6 +97,9 @@ class _ForumScreenState extends State<ForumScreen> {
                 return CustomAlertDialog(
                   title: "Alert",
                   description: "Are you sure you want to delete this?",
+                  ontap: () {
+                    Navigator.pop(context, true);
+                  },
                 );
               });
         },

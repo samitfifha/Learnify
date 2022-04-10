@@ -20,6 +20,8 @@ class ExploreScreen extends StatefulWidget {
 List list = [];
 
 fetchcourses(value) async {
+  list.clear();
+
   http.Response response = await http
       .get(Uri.parse(BaseURL + "courses/search/" + value))
       .then((response) async {
@@ -29,6 +31,24 @@ fetchcourses(value) async {
           .decode(response.body)
           .map((data) => Course.fromJson(data))
           .toList();
+    }
+    return response;
+  });
+  return true;
+}
+
+fetchbytag(tag) async {
+  list.clear();
+  http.Response response = await http
+      .get(Uri.parse(BaseURL + "courses/tag/" + tag))
+      .then((response) async {
+    //print(response.statusCode);
+    if (response.statusCode == 200) {
+      list = json
+          .decode(response.body)
+          .map((data) => Course.fromJson(data))
+          .toList();
+      print(list);
     }
     return response;
   });
@@ -172,6 +192,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ontap: () {
                   setState(() {
                     selectedindex = index;
+                    fetchbytag(categories1[selectedindex]["name"]
+                        .toString()
+                        .toLowerCase());
+                    setState(() {});
                   });
                 },
                 isActive: selectedindex == index,

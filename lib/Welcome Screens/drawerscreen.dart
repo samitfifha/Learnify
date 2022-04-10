@@ -4,6 +4,7 @@ import 'package:learnifyflutter/Welcome%20Screens/loginscreen.dart';
 import 'package:learnifyflutter/settingscreen.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:learnifyflutter/widgets/custom_dialog_box.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -213,18 +214,22 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         width: 10,
                       ),
                       InkWell(
-                        onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.remove("_id");
+                        onTap: () => CustomAlertDialog(
+                          title: "Logout",
+                          description: "Are you sure you want to logout",
+                          ontap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.remove("_id");
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const LoginScreen(),
-                            ),
-                          );
-                        },
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const LoginScreen(),
+                              ),
+                            );
+                          },
+                        ),
                         child: Text(
                           'Log out',
                           style: TextStyle(
