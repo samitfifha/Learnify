@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
+import 'package:learnifyflutter/widgets/custom_dialog_box.dart';
 
 class ForumScreen extends StatefulWidget {
   const ForumScreen({Key? key}) : super(key: key);
@@ -93,23 +94,9 @@ class _ForumScreenState extends State<ForumScreen> {
           return showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
-                  title: Text('Are you sure?'),
-                  content: Text('Do you want to delete this course?'),
-                  actions: [
-                    ElevatedButton(
-                      child: Text('No'),
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text('Yes'),
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                    ),
-                  ],
+                return CustomAlertDialog(
+                  title: "Alert",
+                  description: "Are you sure you want to delete this?",
                 );
               });
         },

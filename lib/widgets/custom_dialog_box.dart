@@ -1,69 +1,91 @@
 import 'package:flutter/material.dart';
 
-class CustomDialogBox extends StatelessWidget {
-  final double _borderRadius = 20;
-  final String title, description;
-
-  CustomDialogBox({
+class CustomAlertDialog extends StatefulWidget {
+  const CustomAlertDialog({
+    Key? key,
     required this.title,
     required this.description,
-  });
+  }) : super(key: key);
+
+  final String title, description;
 
   @override
+  _CustomAlertDialogState createState() => _CustomAlertDialogState();
+}
+
+class _CustomAlertDialogState extends State<CustomAlertDialog> {
+  @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    // TODO: implement build
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
-      child: Dialog(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_borderRadius),
-        ),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: width,
-              margin: const EdgeInsets.only(bottom: 20),
-              padding: const EdgeInsets.only(
-                top: 24,
-                left: 20,
-                right: 20,
-                bottom: 80,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(_borderRadius),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
+    return Dialog(
+      elevation: 0,
+      backgroundColor: Color(0xffffffff),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 15),
+          Text(
+            "${widget.title}",
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 15),
+          Text("${widget.description}"),
+          SizedBox(height: 20),
+          Divider(
+            height: 1,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: InkWell(
+              highlightColor: Colors.grey[200],
+              onTap: () {
+                //do somethig
+              },
+              child: Center(
+                child: Text(
+                  "Continue",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Container(
-                    height: 1.5,
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [],
-                    ),
-                  )
-                ],
+                ),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+          Divider(
+            height: 1,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: InkWell(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15.0),
+                bottomRight: Radius.circular(15.0),
+              ),
+              highlightColor: Colors.grey[200],
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Center(
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
