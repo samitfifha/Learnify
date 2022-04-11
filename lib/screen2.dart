@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:learnifyflutter/widgets/custom_dialog_basic.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
 import 'package:square_in_app_payments/in_app_payments.dart';
 import 'package:square_in_app_payments/models.dart';
 
@@ -32,7 +34,6 @@ import 'package:path/path.dart';
 import 'package:readmore/readmore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:learnifyflutter/Models/coursesModel.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
@@ -77,6 +78,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   void _onCardEntryComplete() {
     // Update UI to notify user that the payment flow is finished successfully
   }
+  late Future<bool> fetchedCourses;
 
   void initState() {
     super.initState();
@@ -239,7 +241,25 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                           : Icons.favorite_border_outlined),
                                       color:
                                           (click ? Colors.red : Colors.white),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        final userid = prefs.getString("_id")!;
+                                        Map<String, String> headers = {
+                                          "Content-Type":
+                                              "application/json; charset=utf-8"
+                                        };
+                                        Map<String, dynamic> body = {
+                                          "courseid": widget.myObject.id,
+                                        };
+                                        http.post(
+                                            Uri.parse(BaseURL +
+                                                "users/wish/" +
+                                                userid),
+                                            headers: headers,
+                                            body: json.encode(body));
+
                                         final snackBar = SnackBar(
                                           backgroundColor:
                                               Colors.redAccent.withOpacity(0.8),
@@ -248,11 +268,21 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                           action: SnackBarAction(
                                             label: 'Undo',
                                             textColor: Colors.white,
-                                            onPressed: () {
+                                            onPressed: () async {
                                               setState(() {
                                                 click = false;
                                               });
                                               // Some code to undo the change.
+                                              Map<String, dynamic> body = {
+                                                "courseid": widget.myObject.id
+                                                    .toString(),
+                                              };
+                                              http.post(
+                                                  Uri.parse(BaseURL +
+                                                      "users/wishremove/" +
+                                                      userid),
+                                                  headers: headers,
+                                                  body: json.encode(body));
                                             },
                                           ),
                                         );
