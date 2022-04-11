@@ -27,11 +27,6 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
-            'assets/log-out.png',
-            height: 30,
-            width: 30,
-          ),
           SizedBox(height: 15),
           Text(
             "${widget.title}",

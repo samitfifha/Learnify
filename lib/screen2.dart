@@ -51,6 +51,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   bool isVideoMuted = true;
   bool isAudioMuted = true;
   String username = '';
+  bool click = false;
 
   Future<void> _onStartCardEntryFlow() async {
     await InAppPayments.startCardEntryFlow(
@@ -226,10 +227,16 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                         color: Colors.white),
                                   ),
                                   Spacer(),
-                                  Icon(
-                                    Icons.bookmark_add_outlined,
-                                    color: Colors.white,
-                                    size: 30,
+                                  IconButton(
+                                    icon: Icon(click
+                                        ? Icons.favorite_border_outlined
+                                        : Icons.favorite),
+                                    color: (click ? Colors.white : Colors.red),
+                                    onPressed: () {
+                                      setState(() {
+                                        click = !click;
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
