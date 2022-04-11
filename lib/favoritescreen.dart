@@ -76,12 +76,30 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     );
   }
 
+  final leftEditIcon = Container(
+    color: Colors.green,
+    child: Icon(Icons.edit),
+    alignment: Alignment.centerLeft,
+  );
+  final rightDeleteIcon = Container(
+    color: Colors.red,
+    child: Icon(Icons.delete),
+    alignment: Alignment.centerRight,
+  );
+
   Widget getMyfavorite() {
     return ListView.builder(
       itemCount: 3,
       itemBuilder: (context, index) => Dismissible(
         key: ValueKey(index),
-        direction: DismissDirection.endToStart,
+        secondaryBackground: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.blueAccent,
+          ),
+          child: Icon(Icons.shopping_bag, color: Colors.white),
+          padding: const EdgeInsets.all(8.0),
+        ),
         background: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
@@ -90,21 +108,29 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           child: Icon(Icons.delete, color: Colors.white),
           padding: const EdgeInsets.all(8.0),
         ),
-        confirmDismiss: (direction) {
-          return showDialog(
-              context: context,
-              builder: (context) {
-                return CustomAlertDialog(
-                  title: "Alert",
-                  description: "Are you sure you want to delete this?",
-                  ontap: () {
-                    Navigator.pop(context, true);
-                  },
-                );
-              });
-        },
-        onDismissed: (direction) {
-          print('Dismissed');
+        onDismissed: (DismissDirection direction) {
+          if (direction == DismissDirection.startToEnd) {
+            // Left to right
+            // Nizar Zid hne fazet el delete from wishlist eli besh taamlha
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return CustomAlertDialog(
+                    title: "Alert",
+                    description: "Are you sure you want to delete this?",
+                    ontap: () {
+                      Navigator.pop(context, true);
+                    },
+                  );
+                });
+            print("Edit");
+          } else if (direction == DismissDirection.endToStart) {
+            // Right to left
+            // nizar zid hne fazet el payement belehy !!!!!!!!!!!!!!!!!!!
+            print("Delete");
+
+            setState(() {});
+          }
         },
         child: Container(
           padding: EdgeInsets.all(10),
