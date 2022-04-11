@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Welcome%20Screens/loginscreen.dart';
 
 import 'package:learnifyflutter/settingscreen.dart';
+import 'package:learnifyflutter/theme_provider.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:learnifyflutter/widgets/change_theme_button_widget.dart';
 import 'package:learnifyflutter/widgets/custom_dialog_box.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -72,6 +75,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
     return FutureBuilder(
         future: fetchedUser,
         builder: (context, snapshot) {
@@ -130,10 +136,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          Text('',
+                          Text('azeazeaeqsdsqd',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold))
+                                  fontWeight: FontWeight.bold)),
+                          ChangeThemeButtonWidget(),
                         ],
                       )
                     ],

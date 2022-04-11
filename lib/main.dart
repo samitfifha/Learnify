@@ -5,22 +5,19 @@ import 'package:learnifyflutter/Courses%20Screens/addLessons.dart';
 import 'package:learnifyflutter/Welcome%20Screens/splashscreen.dart';
 import 'package:learnifyflutter/chewie_list_item.dart';
 import 'package:learnifyflutter/testscreen.dart';
+import 'package:learnifyflutter/theme_provider.dart';
 
 import 'package:learnifyflutter/utilities/session.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:learnifyflutter/videoplayer.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'Welcome Screens/mainscreen.dart';
 import 'package:learnifyflutter/test.dart';
 import 'chewie_list_item.dart';
 
-
-
-
-
 void main() async {
-
   runApp(OverlaySupport.global(
     child: MaterialApp(
       home: MyApp(),
@@ -32,11 +29,17 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: const SplachScreen(),
-      //body: MyVideoPlayer(),
-      //body:
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        builder: (context, _) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+
+          return MaterialApp(
+            themeMode: themeProvider.themeMode,
+            theme: MyThemes.lightTheme,
+            darkTheme: MyThemes.darkTheme,
+            home: SplachScreen(),
+          );
+        },
+      );
 }

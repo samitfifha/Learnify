@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
+import 'package:learnifyflutter/theme_provider.dart';
+import 'package:learnifyflutter/widgets/change_theme_button_widget.dart';
+import 'package:provider/provider.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -12,6 +15,9 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Stack(
@@ -157,12 +163,13 @@ class _SettingScreenState extends State<SettingScreen> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        buildNotificationOptionRow(
-                                            "New for you", true),
-                                        buildNotificationOptionRow(
-                                            "Account activity", true),
-                                        buildNotificationOptionRow(
-                                            "Opportunity", false),
+                                        Row(
+                                          children: [
+                                            Text("Light/Dark Mode"),
+                                            Spacer(),
+                                            ChangeThemeButtonWidget()
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
