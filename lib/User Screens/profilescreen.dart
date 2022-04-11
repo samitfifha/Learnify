@@ -46,6 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             .decode(response.body)
             .map((data) => Course.fromJson(data))
             .toList();
+        print(list);
       }
       return response;
     });
