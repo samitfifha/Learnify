@@ -1,188 +1,253 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/User%20Screens/profilescreen.dart';
+import 'package:learnifyflutter/Welcome%20Screens/loginscreen.dart';
 
-class SettingsUI extends StatelessWidget {
+import 'package:learnifyflutter/settingscreen.dart';
+import 'package:learnifyflutter/theme_provider.dart';
+import 'package:learnifyflutter/utilities/content_model.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:learnifyflutter/widgets/change_theme_button_widget.dart';
+import 'package:learnifyflutter/widgets/custom_dialog_box.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:path/path.dart';
+
+class DrawerScreen extends StatefulWidget {
+  const DrawerScreen({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Setting UI",
-      home: EditProfilePage(),
-    );
+  _DrawerScreenState createState() => _DrawerScreenState();
+}
+
+class _DrawerScreenState extends State<DrawerScreen> {
+  late String username;
+  late String profilePicpath;
+  late String profilePic;
+  late String imagePath;
+
+  late Future<bool> fetchedUser;
+
+  Future<bool> fetchUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userid = prefs.getString("_id")!;
+
+    try {
+      http.Response response = await http
+          .get(Uri.parse(BaseURL + "users/" + userid))
+          .then((response) async {
+        print(response.statusCode);
+        if (response.statusCode == 201) {
+          Map<String, dynamic> userData = json.decode(response.body);
+
+          username = userData["firstName"] + " " + userData["lastName"];
+          profilePicpath = userData["profilePic"];
+
+          if (profilePicpath.startsWith('public')) {
+            profilePic = profilePicpath.substring(22, profilePicpath.length);
+            imagePath = BaseURL + 'images/uploads/' + profilePic;
+          } else if (profilePicpath.startsWith('https')) {
+            profilePicpath = userData["profilePic"];
+            imagePath = profilePicpath;
+          }
+          //print(profilePic);
+        }
+        return response;
+      });
+    } catch (err) {
+      print(err);
+      return true;
+    }
+    return true;
   }
-}
 
-class EditProfilePage extends StatefulWidget {
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
-}
+  void initState() {
+    // TODO: implement initState
+    try {
+      fetchedUser = fetchUser();
+    } catch (err) {
+      print(err);
+    }
 
-class _EditProfilePageState extends State<EditProfilePage> {
-  bool showPassword = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
-          ),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.green,
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => ProfileScreen()));
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+    return Container(
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.teal, Colors.indigo],
+      )),
+      padding: EdgeInsets.only(top: 50, bottom: 70, left: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
-                              ))),
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: FutureBuilder(
+                    future: fetchedUser,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData)
+                        return Container(
+                          width: 45,
+                          height: 45,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: Colors.green,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        )),
-                  ],
+                              border: Border.all(
+                                  width: 3,
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    color: Colors.black.withOpacity(0.1),
+                                    offset: Offset(0, 10))
+                              ],
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    imagePath,
+                                  ))),
+                        );
+                      else if (snapshot.hasError)
+                        return Text("Error");
+                      else
+                        return CircularProgressIndicator();
+                    },
+                  ),
                 ),
               ),
               SizedBox(
-                height: 35,
+                width: 20,
               ),
-              buildTextField("Full Name", "Dor Alex", false),
-              buildTextField("E-mail", "alexd@gmail.com", false),
-              buildTextField("Password", "********", true),
-              buildTextField("Location", "TLV, Israel", false),
-              SizedBox(
-                height: 35,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  OutlineButton(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {},
-                    child: Text("CANCEL",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.black)),
+                  Text(
+                    username,
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  RaisedButton(
-                    onPressed: () {},
-                    color: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "SAVE",
+                  Text('',
                       style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
-                    ),
-                  )
+                          color: Colors.white, fontWeight: FontWeight.bold)),
                 ],
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-        obscureText: isPasswordTextField ? showPassword : false,
-        decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
-                    ),
-                  )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
+          Column(
+            children: drawerItems
+                .map((element) => Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => element['screen']));
+                            },
+                            child: Icon(
+                              element['icon'],
+                              color: Colors.white,
+                              size: 25,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => element['screen']));
+                            },
+                            child: Text(element['title'],
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20)),
+                          )
+                        ],
+                      ),
+                    ))
+                .toList(),
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SettingScreen()));
+                },
+                child: Text(
+                  'Settings',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                width: 2,
+                height: 20,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () => showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomAlertDialog(
+                        title: "Logout",
+                        description: "Are you sure you want to logout ?",
+                        ontap: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.remove("_id");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                      );
+                    }),
+                child: Text(
+                  'Log out',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          )
+        ],
       ),
     );
   }

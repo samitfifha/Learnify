@@ -78,22 +78,23 @@ class _DrawerScreenState extends State<DrawerScreen> {
     final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
         ? 'DarkTheme'
         : 'LightTheme';
-    return FutureBuilder(
-        future: fetchedUser,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.teal, Colors.indigo],
-              )),
-              padding: EdgeInsets.only(top: 50, bottom: 70, left: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+
+    return Container(
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.teal, Colors.indigo],
+      )),
+      padding: EdgeInsets.only(top: 50, bottom: 70, left: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FutureBuilder(
+              future: fetchedUser,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Row(
                     children: [
                       Positioned(
                         top: 0,
@@ -136,127 +137,121 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          Text('azeazeaeqsdsqd',
+                          Text('',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold)),
-                          ChangeThemeButtonWidget(),
                         ],
                       )
                     ],
-                  ),
-                  Column(
-                    children: drawerItems
-                        .map((element) => Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  element['screen']));
-                                    },
-                                    child: Icon(
-                                      element['icon'],
-                                      color: Colors.white,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  element['screen']));
-                                    },
-                                    child: Text(element['title'],
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20)),
-                                  )
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.settings,
-                        color: Colors.white,
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+          Column(
+            children: drawerItems
+                .map((element) => Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => element['screen']));
+                            },
+                            child: Icon(
+                              element['icon'],
+                              color: Colors.white,
+                              size: 25,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => element['screen']));
+                            },
+                            child: Text(element['title'],
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20)),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SettingScreen()));
-                        },
-                        child: Text(
-                          'Settings',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        width: 2,
-                        height: 20,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () => showDialog(
-                            context: context,
-                            builder: (context) {
-                              return CustomAlertDialog(
-                                title: "Logout",
-                                description:
-                                    "Are you sure you want to logout ?",
-                                ontap: () async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.remove("_id");
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const LoginScreen(),
-                                    ),
-                                  );
-                                },
-                              );
-                            }),
-                        child: Text(
-                          'Log out',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                    ))
+                .toList(),
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.settings,
+                color: Colors.white,
               ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+              SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SettingScreen()));
+                },
+                child: Text(
+                  'Settings',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                width: 2,
+                height: 20,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () => showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomAlertDialog(
+                        title: "Logout",
+                        description: "Are you sure you want to logout ?",
+                        ontap: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.remove("_id");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                      );
+                    }),
+                child: Text(
+                  'Log out',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
