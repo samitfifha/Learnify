@@ -59,6 +59,8 @@ dependencies:
   flutter_pdfview: ^1.2.2
   square_in_app_payments: ^1.7.3
   provider:
+  screenshot:
+  share:
 
 
   # The following adds the Cupertino Icons font to your application.

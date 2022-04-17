@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:learnifyflutter/widgets/Custom_waiting_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -235,6 +236,11 @@ class _AddLessonsState extends State<AddLessons> {
                                             .transform(utf8.decoder)
                                             .listen((value) {
                                           //print(value);
+                                          CustomAlertDialog3(
+                                            title: "please Wait",
+                                            description:
+                                                "Please wait until your course is creeated",
+                                          );
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -242,7 +248,6 @@ class _AddLessonsState extends State<AddLessons> {
                                             ),
                                           );
                                         });
-                                        sleep(const Duration(seconds: 5));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(
