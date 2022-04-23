@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:learnifyflutter/Courses%20Screens/addLessons.dart';
+import 'package:learnifyflutter/User%20Screens/ForgetPassword.dart';
 import 'package:learnifyflutter/Welcome%20Screens/splashscreen.dart';
 import 'package:learnifyflutter/widgets/chewie_list_item.dart';
 import 'package:learnifyflutter/testscreen.dart';
@@ -28,8 +29,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const SplachScreen(),
-      //body: MyVideoPlayer(),
+      //body: const SplachScreen(),
+      body: ForgetPassword(),
       //body:
     );
   }

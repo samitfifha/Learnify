@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/User%20Screens/ForgetPassword.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/User%20Screens/registerscreen.dart';
 
@@ -140,7 +141,12 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 child: Text("Forget Password ?"),
-                onTap: () => {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgetPassword()));
+                },
               ),
             ),
             GestureDetector(
