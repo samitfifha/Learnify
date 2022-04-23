@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:learnifyflutter/App%20Screens/Notificationscreen.dart';
 import 'package:learnifyflutter/Courses%20Screens/filecourse.dart';
 import 'package:learnifyflutter/User%20Screens/profilescreen.dart';
-import 'package:learnifyflutter/favoritescreen.dart';
-import 'package:learnifyflutter/Notificationscreen.dart';
-import 'package:learnifyflutter/Forumscreen.dart';
-import 'package:learnifyflutter/screen2.dart';
+import 'package:learnifyflutter/App%20Screens/favoritescreen.dart';
+import 'package:learnifyflutter/App%20Screens/Forumscreen.dart';
+import 'package:learnifyflutter/Courses%20Screens/screen2.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
-import 'package:learnifyflutter/theme_provider.dart';
+import 'package:learnifyflutter/widgets/theme_provider.dart';
 import 'package:learnifyflutter/widgets/change_theme_button_widget.dart';
 import 'package:provider/provider.dart';
 

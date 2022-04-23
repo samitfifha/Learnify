@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/theme_provider.dart';
+import 'package:learnifyflutter/widgets/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class ChangeThemeButtonWidget extends StatelessWidget {

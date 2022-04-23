@@ -1,7 +1,14 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/thread.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Models/ForumModel.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({Key? key}) : super(key: key);
@@ -10,7 +17,39 @@ class MessagesScreen extends StatefulWidget {
   _MessagesScreenState createState() => _MessagesScreenState();
 }
 
+late String userid;
+String? title;
+String? content;
+DateFormat? createdat;
+String? tag;
+List threads = [];
+late Future<bool> fetchedthreads;
+
+Future<bool> fetchthreads() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  userid = prefs.getString("_id")!;
+  http.Response response =
+      await http.get(Uri.parse(BaseURL + "threads/")).then((response) async {
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      Map<String, dynamic> data = json.decode(response.body);
+      threads = data["threads"];
+      print(threads);
+    }
+
+    print(threads);
+    return response;
+  });
+  return true;
+}
+
 class _MessagesScreenState extends State<MessagesScreen> {
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  void initState() {
+    super.initState();
+    fetchedthreads = fetchthreads();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -25,7 +64,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               splashColor: Colors.cyan,
-              onPressed: () {},
+              onPressed: () => openDialog(),
               child: Icon(
                 Icons.add_business_outlined,
               ),
@@ -101,9 +140,94 @@ class _MessagesScreenState extends State<MessagesScreen> {
     );
   }
 
+  Future openDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Center(child: Text("New thread")),
+          content: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.title,
+                    color: Colors.blueAccent,
+                  ),
+                  hintText: "Title",
+                ),
+                onChanged: (value) {
+                  title = value;
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.title,
+                    color: Colors.blueAccent,
+                  ),
+                  hintText: "Description",
+                ),
+                onChanged: (value) {
+                  content = value;
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.title,
+                    color: Colors.blueAccent,
+                  ),
+                  hintText: "Tag",
+                ),
+                onChanged: (value) {
+                  tag = value;
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: () async {
+                  Map<String, String> headers = {
+                    "Content-Type": "application/json; charset=utf-8"
+                  };
+                  Map<String, dynamic> body = {
+                    "title": title,
+                    "content": content,
+                    "tag": tag,
+                  };
+                  http
+                      .post(Uri.parse(BaseURL + "threads/new/" + userid),
+                          headers: headers, body: json.encode(body))
+                      .then((response) async {
+                    print(response.statusCode);
+                    if (response.statusCode == 201) {
+                      Map<String, dynamic> userData =
+                          json.decode(response.body);
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MessagesScreen(),
+                        ),
+                      );
+                      //Navigator.pushReplacementNamed(context, "/home");
+                      print("success addd");
+                    } else {
+                      print("failed");
+                    }
+                  });
+                },
+                child: Text("submit"))
+          ],
+        ),
+      );
+
   Widget getthreads() {
     return ListView.builder(
-      itemCount: 3,
+      itemCount: threads.length,
       itemBuilder: (context, index) => Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.only(top: 5, bottom: 5),

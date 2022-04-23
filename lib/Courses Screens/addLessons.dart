@@ -52,6 +52,7 @@ class _AddLessonsState extends State<AddLessons> {
     }
   }
 
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     print(checkid());
@@ -153,60 +154,81 @@ class _AddLessonsState extends State<AddLessons> {
                                           new SizedBox(
                                             height: 20.0,
                                           ),
-                                          Center(
-                                            child: Text(
-                                                "Please note that in case of none choosen file, the lesson will be added as VisioConference Meeting"),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Text("Meet Video Lesson"),
+                                              Spacer(),
+                                              Flexible(
+                                                child: CheckboxListTile(
+                                                  value: isChecked,
+                                                  onChanged: (bool? value) {
+                                                    setState(() {
+                                                      isChecked = value!;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                           SizedBox(
                                             height: 15,
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 20, right: 20, top: 10),
-                                              padding: EdgeInsets.only(
-                                                  left: 20, right: 20),
-                                              alignment: Alignment.center,
-                                              height: 54,
-                                              decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                      colors: [
-                                                        (Colors.green),
-                                                        (Colors.black)
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end: Alignment
-                                                          .centerRight),
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        offset: Offset(0, 10),
-                                                        blurRadius: 50,
-                                                        color:
-                                                            Color(0xffEEEEEE)),
-                                                  ]),
-                                              child: InkWell(
-                                                onTap: () => pickImage(),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "Add Files",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    SizedBox(width: 130),
-                                                    Icon(
-                                                      Icons.add,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ],
+                                          if (!isChecked)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 20,
+                                                    right: 20,
+                                                    top: 10),
+                                                padding: EdgeInsets.only(
+                                                    left: 20, right: 20),
+                                                alignment: Alignment.center,
+                                                height: 54,
+                                                decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                        colors: [
+                                                          (Colors.green),
+                                                          (Colors.black)
+                                                        ],
+                                                        begin: Alignment
+                                                            .centerLeft,
+                                                        end: Alignment
+                                                            .centerRight),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          offset: Offset(0, 10),
+                                                          blurRadius: 50,
+                                                          color: Color(
+                                                              0xffEEEEEE)),
+                                                    ]),
+                                                child: InkWell(
+                                                  onTap: () => pickImage(),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Add Files",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      SizedBox(width: 130),
+                                                      Icon(
+                                                        Icons.add,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
                                         ],
                                       ),
                                     ),

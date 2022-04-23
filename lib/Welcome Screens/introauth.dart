@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
-import 'package:learnifyflutter/Welcome Screens/loginscreen.dart';
-import 'package:learnifyflutter/Welcome Screens/registerscreen.dart';
+import 'package:learnifyflutter/User%20Screens/loginscreen.dart';
+import 'package:learnifyflutter/User%20Screens/registerscreen.dart';
 
 class IntroAuth extends StatefulWidget {
   static const String id = "idintroauth";

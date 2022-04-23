@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:learnifyflutter/App%20Screens/Forumscreen.dart';
 import 'package:learnifyflutter/Models/ForumModel.dart';
-import 'package:learnifyflutter/Notificationscreen.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
-import 'package:learnifyflutter/forumscreen.dart';
+import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:readmore/readmore.dart';
+import 'package:http/http.dart' as http;
+import 'Models/ForumModel.dart';
 
 class ThreadScreen extends StatefulWidget {
   const ThreadScreen({Key? key}) : super(key: key);
@@ -13,9 +17,9 @@ class ThreadScreen extends StatefulWidget {
 }
 
 class _ThreadScreenState extends State<ThreadScreen> {
-  _buildMessage(Message message, bool isMe) {
+  _buildMessage() {
     final Container msg = Container(
-      margin: isMe
+      /*margin: isMe
           ? EdgeInsets.only(
               top: 8.0,
               bottom: 8.0,
@@ -24,12 +28,12 @@ class _ThreadScreenState extends State<ThreadScreen> {
           : EdgeInsets.only(
               top: 8.0,
               bottom: 8.0,
-            ),
+            ),*/
       padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
       width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
-        color: isMe ? Theme.of(context).accentColor : Color(0xFFFFEFEE),
-        borderRadius: isMe
+        color: Color(0xFFFFEFEE),
+        /*borderRadius: isMe
             ? BorderRadius.only(
                 topLeft: Radius.circular(15.0),
                 bottomLeft: Radius.circular(15.0),
@@ -37,13 +41,13 @@ class _ThreadScreenState extends State<ThreadScreen> {
             : BorderRadius.only(
                 topRight: Radius.circular(15.0),
                 bottomRight: Radius.circular(15.0),
-              ),
+              ),*/
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            message.time,
+            "message.time",
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16.0,
@@ -52,7 +56,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
           ),
           SizedBox(height: 8.0),
           Text(
-            message.text,
+            "message.text",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16.0,
@@ -62,13 +66,13 @@ class _ThreadScreenState extends State<ThreadScreen> {
         ],
       ),
     );
-    if (isMe) {
+    /*if (isMe) {
       return msg;
-    }
+    }*/
     return Row(
       children: <Widget>[
         msg,
-        IconButton(
+        /*IconButton(
           icon: message.isLiked
               ? Icon(Icons.favorite)
               : Icon(Icons.favorite_border),
@@ -77,7 +81,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
               ? Theme.of(context).primaryColor
               : Colors.blueGrey,
           onPressed: () {},
-        )
+        )*/
       ],
     );
   }
@@ -143,7 +147,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MainScreen()));
+                                    builder: (context) => MessagesScreen()));
                           },
                           child: Icon(
                             Icons.arrow_back_ios,
@@ -194,19 +198,14 @@ class _ThreadScreenState extends State<ThreadScreen> {
                       ),
                     ),
                     Container(
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        reverse: true,
-                        padding: EdgeInsets.only(top: 15.0),
-                        itemCount: messages.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final Message message = messages[index];
-                          final bool isMe = true;
-                          return _buildMessage(message, isMe);
-                        },
-                      ),
-                    ),
+                        child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      reverse: true,
+                      padding: EdgeInsets.only(top: 15.0),
+                      itemCount: 3,
+                      itemBuilder: (context, index) => _buildMessage(),
+                    )),
                     _buildMessageComposer(),
                   ],
                 ),
@@ -251,7 +250,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
     );
   }
 
-  buildMessage(Message message, bool isMe) {
+  buildMessage(Thread message, bool isMe) {
     final Container msg = Container(
       margin: isMe
           ? EdgeInsets.only(
@@ -281,7 +280,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            message.time,
+            "",
             style: TextStyle(
               color: Colors.blueGrey,
               fontSize: 16.0,
@@ -290,7 +289,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
           ),
           SizedBox(height: 8.0),
           Text(
-            message.text,
+            "Thread.content",
             style: TextStyle(
               color: Colors.blueGrey,
               fontSize: 16.0,
@@ -306,7 +305,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
     return Row(
       children: <Widget>[
         msg,
-        IconButton(
+        /*IconButton(
           icon: message.isLiked
               ? Icon(Icons.favorite)
               : Icon(Icons.favorite_border),
@@ -315,7 +314,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
               ? Theme.of(context).primaryColor
               : Colors.blueGrey,
           onPressed: () {},
-        )
+        )*/
       ],
     );
   }

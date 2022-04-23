@@ -26,7 +26,7 @@ import 'package:footer/footer.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:learnifyflutter/Models/CoursesModel.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
-import 'package:learnifyflutter/chewie_list_item.dart';
+import 'package:learnifyflutter/widgets/chewie_list_item.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/data.dart';

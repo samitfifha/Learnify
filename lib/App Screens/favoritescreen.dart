@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/explore.dart';
-import 'package:learnifyflutter/screen2.dart';
+import 'package:learnifyflutter/App%20Screens/explore.dart';
+import 'package:learnifyflutter/Courses%20Screens/screen2.dart';
 import 'package:learnifyflutter/widgets/custom_dialog_box.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:learnifyflutter/Models/coursesModel.dart';
 
-import 'Welcome Screens/mainscreen.dart';
+import '../Welcome Screens/mainscreen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
