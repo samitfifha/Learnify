@@ -14,12 +14,38 @@ class Pin_verif extends StatefulWidget {
 class _Pin_verifState extends State<Pin_verif> {
   static const maxSeconds = 60;
   int seconds = maxSeconds;
+
+  int count = 60;
+
+  /// declare a timer
   Timer? timer;
 
-  startTimer() {
-    timer = Timer(Duration(seconds: 1), () {
-      setState(() => seconds--);
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    /// Initialize a periodic timer with 1 second duration
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        /// callback will be executed every 1 second, increament a count value
+        /// on each callback
+        if (seconds > 0) {
+          setState(() {
+            seconds--;
+          });
+        } else {
+          /// stop timer if count value is greater than maxSeconds
+          timer.cancel();
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
   }
 
   @override
@@ -57,6 +83,36 @@ class _Pin_verifState extends State<Pin_verif> {
               OtpForm(),
               SizedBox(
                 height: 20,
+              ),
+              Center(
+                child: Text(
+                  "you didn't recieve your verification code ?  ",
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'you can resend Code in :',
+                    style: TextStyle(
+                      fontSize: 10,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    '$count',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 400,
