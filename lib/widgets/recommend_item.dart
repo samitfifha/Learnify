@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/screen2.dart';
+import 'package:learnifyflutter/Courses%20Screens/screen2.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 

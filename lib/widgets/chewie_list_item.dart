@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
-import 'package:learnifyflutter/screen2.dart';
+import 'package:learnifyflutter/Courses%20Screens/screen2.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 

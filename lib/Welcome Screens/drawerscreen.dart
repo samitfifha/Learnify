@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learnifyflutter/Welcome%20Screens/loginscreen.dart';
+import 'package:learnifyflutter/User%20Screens/loginscreen.dart';
 
-import 'package:learnifyflutter/settingscreen.dart';
-import 'package:learnifyflutter/theme_provider.dart';
+import 'package:learnifyflutter/App%20Screens/settingscreen.dart';
+import 'package:learnifyflutter/widgets/theme_provider.dart';
 import 'package:learnifyflutter/utilities/content_model.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'package:learnifyflutter/widgets/change_theme_button_widget.dart';
@@ -75,9 +75,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
-        ? 'DarkTheme'
-        : 'LightTheme';
+    ;
 
     return Container(
       decoration: const BoxDecoration(
