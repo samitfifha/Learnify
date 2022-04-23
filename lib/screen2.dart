@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:learnifyflutter/widgets/custom_dialog_basic.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -37,6 +39,35 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter/rendering.dart'; // In order to use RepaintBoundary, RenderRepaintBoundary
+
+import 'dart:ui' as ui;
+import 'dart:typed_data';
+import 'package:native_screenshot/native_screenshot.dart';
+
+import 'package:camera/camera.dart';
+
+//take a picture with camera
+Future<String?> takePic() async {
+  await Future.delayed(Duration(seconds: 20), () {
+    debugPrint("waiting for 10 seconds");
+  });
+  final camera = (await availableCameras()).last;
+  final controller = CameraController(camera, ResolutionPreset.medium);
+  try {
+    await controller.initialize();
+    await controller.setFlashMode(FlashMode.off);
+    final image = await controller.takePicture();
+    controller.dispose();
+    print("image path: ${image.path}");
+    return image.path;
+  } catch (e) {
+    print("some error occured :");
+    print(e);
+    controller.dispose();
+    return null;
+  }
+}
 
 class Screen2 extends StatefulWidget {
   var myObject;
@@ -45,15 +76,56 @@ class Screen2 extends StatefulWidget {
   _Screen2State createState() => _Screen2State();
 }
 
+final GlobalKey _key = GlobalKey();
+
 class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late Future<bool> fetchedLessons;
   TextEditingController namecontroller = TextEditingController();
   TextEditingController roomcontroller = TextEditingController();
-  bool isVideoMuted = true;
+  bool isVideoMuted = false;
   bool isAudioMuted = true;
   String username = '';
   bool click = false;
+
+  void screenshot() async {
+    final String? path = await takePic();
+
+    await sendscreen(path.toString());
+
+    await Future.delayed(Duration(seconds: 40), () {
+      screenshot();
+    });
+  }
+
+  Future<void> sendscreen(String path) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userid = prefs.getString("_id")!;
+    var request =
+        http.MultipartRequest('POST', Uri.parse(BaseURL + "faceapi/" + userid));
+    request.files.add(await http.MultipartFile.fromPath('file', path));
+    try {
+      var response = await request.send();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //take a screenshot of the system
+  void takeScreenshot() async {
+    final RenderRepaintBoundary boundary =
+        _key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final ui.Image image = await boundary.toImage();
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    final pngBytes = byteData!.buffer.asUint8List();
+    final bs64 = base64Encode(pngBytes);
+    print(bs64);
+    //save image to cache
+    final directory = (await getTemporaryDirectory()).path;
+    final file = File('$directory/screenshot.png');
+    await file.writeAsBytes(pngBytes);
+    print("image path: " + file.path);
+  }
 
   Future<void> _onStartCardEntryFlow() async {
     await InAppPayments.startCardEntryFlow(
@@ -85,6 +157,36 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
     tabController = TabController(length: 2, vsync: this);
     InAppPayments.setSquareApplicationId(
         'sandbox-sq0idb-l8M5v3_UGiQiyvmoNPwTAQ');
+
+    JitsiMeet.addListener(JitsiMeetingListener(
+        onConferenceWillJoin: _onConferenceWillJoin,
+        onConferenceJoined: _onConferenceJoined,
+        onConferenceTerminated: _onConferenceTerminated,
+        onError: _onError));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    JitsiMeet.removeAllListeners();
+  }
+
+  void _onConferenceWillJoin(message) {
+    debugPrint("_onConferenceWillJoin broadcasted with message: $message");
+  }
+
+  void _onConferenceJoined(message) async {
+    debugPrint("_onConferenceJoined broadcasted with message: $message");
+    screenshot();
+  }
+
+  void _onConferenceTerminated(message) {
+    debugPrint("_onConferenceTerminated broadcasted with message: $message");
+    dispose();
+  }
+
+  _onError(error) {
+    debugPrint("_onError broadcasted: $error");
   }
 
   String funcV(path) {
@@ -127,7 +229,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   joinmeeting(index) async {
     try {
       Map<FeatureFlagEnum, bool> feautueflags = {
-        FeatureFlagEnum.WELCOME_PAGE_ENABLED: false
+        FeatureFlagEnum.WELCOME_PAGE_ENABLED: true
       };
       if (Platform.isAndroid) {
         feautueflags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
@@ -144,6 +246,10 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
         ..featureFlags.addAll(feautueflags);
 
       await JitsiMeet.joinMeeting(options);
+
+      // await Future.delayed(Duration(seconds: 20), () {
+      //   screenshot();
+      // });
     } catch (e) {
       print("ERRor: $e");
     }
@@ -153,331 +259,337 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.teal, Colors.indigo],
-              ),
-            ),
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 73),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MainScreen()));
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'Detail',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontFamily: 'Nisebuschgardens',
-                          ),
-                        ),
-                        Icon(
-                          Icons.share,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    SingleChildScrollView(
-                      padding: EdgeInsets.fromLTRB(15, 20, 15, 30),
-                      child: Column(
-                        children: [
-                          CustomImage(
-                            func(),
-                            radius: 10,
-                            width: double.infinity,
-                            height: 200,
-                          ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    SizedBox(height: 50),
-                                    Text(
-                                      widget.myObject.title.toString(),
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white),
-                                    ),
-                                    Spacer(),
-                                    IconButton(
-                                      icon: Icon(click
-                                          ? Icons.favorite
-                                          : Icons.favorite_border_outlined),
-                                      color:
-                                          (click ? Colors.red : Colors.white),
-                                      onPressed: () async {
-                                        SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        final userid = prefs.getString("_id")!;
-                                        Map<String, String> headers = {
-                                          "Content-Type":
-                                              "application/json; charset=utf-8"
-                                        };
-                                        Map<String, dynamic> body = {
-                                          "courseid": widget.myObject.id,
-                                        };
-                                        http.post(
-                                            Uri.parse(BaseURL +
-                                                "users/wish/" +
-                                                userid),
-                                            headers: headers,
-                                            body: json.encode(body));
-
-                                        final snackBar = SnackBar(
-                                          backgroundColor:
-                                              Colors.redAccent.withOpacity(0.8),
-                                          content: Text(
-                                              '${widget.myObject.title} has been added to your favorites ❤️️'),
-                                          action: SnackBarAction(
-                                            label: 'Undo',
-                                            textColor: Colors.white,
-                                            onPressed: () async {
-                                              setState(() {
-                                                click = false;
-                                              });
-                                              // Some code to undo the change.
-                                              Map<String, dynamic> body = {
-                                                "courseid": widget.myObject.id
-                                                    .toString(),
-                                              };
-                                              http.post(
-                                                  Uri.parse(BaseURL +
-                                                      "users/wishremove/" +
-                                                      userid),
-                                                  headers: headers,
-                                                  body: json.encode(body));
-                                            },
-                                          ),
-                                        );
-
-                                        // Find the ScaffoldMessenger in the widget tree
-                                        // and use it to show a SnackBar.
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                        setState(() {
-                                          click = !click;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.play_circle_outline,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      widget.myObject.nbrSeance.toString(),
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.schedule_outlined,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      widget.myObject.nbrSeance.toString(),
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.yellow,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      widget.myObject.tag.toString(),
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "About Course ",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.white),
-                                        ),
-                                        SizedBox(
-                                          width: 200,
-                                        )
-                                      ],
-                                    ),
-                                    ReadMoreText(
-                                      widget.myObject.description.toString(),
-                                      trimLines: 2,
-                                      trimMode: TrimMode.Line,
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.white70),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  child: TabBar(
-                                    controller: tabController,
-                                    tabs: [
-                                      Tab(
-                                        child: Text("Lessons"),
-                                      ),
-                                      Tab(
-                                        child: Text("Excerices"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 300,
-                            child: TabBarView(
-                                controller: tabController,
-                                children: [
-                                  getlesson(),
-                                  Center(
-                                      child: Text(
-                                    "Coming Soon...",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 30),
-                                  )),
-                                ]),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Price",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      widget.myObject.price.toString(),
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    final bool check = await checksub();
-                                    if (check == false) {
-                                      _onStartCardEntryFlow();
-                                    } else {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return CustomAlertDialog2(
-                                              title:
-                                                  "You have already subscribed",
-                                              description:
-                                                  "You are already subscribed to this course",
-                                            );
-                                          });
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: 20, right: 20, top: 20),
-                                    padding:
-                                        EdgeInsets.only(left: 20, right: 20),
-                                    alignment: Alignment.center,
-                                    height: 55,
-                                    width: 240,
-                                    decoration: BoxDecoration(
-                                      color: Colors.lightBlue,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      "buy",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+    return RepaintBoundary(
+      key: _key,
+      child: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.teal, Colors.indigo],
                 ),
               ),
             ),
-          ),
-        ],
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 73),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainScreen()));
+                            },
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Detail',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontFamily: 'Nisebuschgardens',
+                            ),
+                          ),
+                          Icon(
+                            Icons.share,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SingleChildScrollView(
+                        padding: EdgeInsets.fromLTRB(15, 20, 15, 30),
+                        child: Column(
+                          children: [
+                            CustomImage(
+                              func(),
+                              radius: 10,
+                              width: double.infinity,
+                              height: 200,
+                            ),
+                            Container(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(height: 50),
+                                      Text(
+                                        widget.myObject.title.toString(),
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white),
+                                      ),
+                                      Spacer(),
+                                      IconButton(
+                                        icon: Icon(click
+                                            ? Icons.favorite
+                                            : Icons.favorite_border_outlined),
+                                        color:
+                                            (click ? Colors.red : Colors.white),
+                                        onPressed: () async {
+                                          SharedPreferences prefs =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          final userid =
+                                              prefs.getString("_id")!;
+                                          Map<String, String> headers = {
+                                            "Content-Type":
+                                                "application/json; charset=utf-8"
+                                          };
+                                          Map<String, dynamic> body = {
+                                            "courseid": widget.myObject.id,
+                                          };
+                                          http.post(
+                                              Uri.parse(BaseURL +
+                                                  "users/wish/" +
+                                                  userid),
+                                              headers: headers,
+                                              body: json.encode(body));
+
+                                          final snackBar = SnackBar(
+                                            backgroundColor: Colors.redAccent
+                                                .withOpacity(0.8),
+                                            content: Text(
+                                                '${widget.myObject.title} has been added to your favorites ❤️️'),
+                                            action: SnackBarAction(
+                                              label: 'Undo',
+                                              textColor: Colors.white,
+                                              onPressed: () async {
+                                                setState(() {
+                                                  click = false;
+                                                });
+                                                // Some code to undo the change.
+                                                Map<String, dynamic> body = {
+                                                  "courseid": widget.myObject.id
+                                                      .toString(),
+                                                };
+                                                http.post(
+                                                    Uri.parse(BaseURL +
+                                                        "users/wishremove/" +
+                                                        userid),
+                                                    headers: headers,
+                                                    body: json.encode(body));
+                                              },
+                                            ),
+                                          );
+
+                                          // Find the ScaffoldMessenger in the widget tree
+                                          // and use it to show a SnackBar.
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                          setState(() {
+                                            click = !click;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.play_circle_outline,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        widget.myObject.nbrSeance.toString(),
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.schedule_outlined,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        widget.myObject.nbrSeance.toString(),
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        widget.myObject.tag.toString(),
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "About Course ",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            width: 200,
+                                          )
+                                        ],
+                                      ),
+                                      ReadMoreText(
+                                        widget.myObject.description.toString(),
+                                        trimLines: 2,
+                                        trimMode: TrimMode.Line,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white70),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    child: TabBar(
+                                      controller: tabController,
+                                      tabs: [
+                                        Tab(
+                                          child: Text("Lessons"),
+                                        ),
+                                        Tab(
+                                          child: Text("Excerices"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 300,
+                              child: TabBarView(
+                                  controller: tabController,
+                                  children: [
+                                    getlesson(),
+                                    Center(
+                                        child: Text(
+                                      "Coming Soon...",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 30),
+                                    )),
+                                  ]),
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Price",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        widget.myObject.price.toString(),
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      final bool check = await checksub();
+                                      if (check == false) {
+                                        _onStartCardEntryFlow();
+                                      } else {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return CustomAlertDialog2(
+                                                title:
+                                                    "You have already subscribed",
+                                                description:
+                                                    "You are already subscribed to this course",
+                                              );
+                                            });
+                                      }
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20, right: 20, top: 20),
+                                      padding:
+                                          EdgeInsets.only(left: 20, right: 20),
+                                      alignment: Alignment.center,
+                                      height: 55,
+                                      width: 240,
+                                      decoration: BoxDecoration(
+                                        color: Colors.lightBlue,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        "buy",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
