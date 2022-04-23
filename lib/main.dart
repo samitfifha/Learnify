@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //body: const SplachScreen(),
-      body: Pin_verif(),
+      body: const SplachScreen(),
+      //body: Pin_verif(),
       //body:
     );
   }
