@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learnifyflutter/User%20Screens/profilescreen.dart';
 import 'package:learnifyflutter/Welcome Screens/mainscreen.dart';
-import 'package:learnifyflutter/settingscreen.dart';
+import 'package:learnifyflutter/App%20Screens/settingscreen.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:learnifyflutter/Welcome Screens/introauth.dart';
-import 'package:learnifyflutter/Welcome Screens/registerscreen.dart';
+import 'package:learnifyflutter/User%20Screens/registerscreen.dart';
 
 import 'package:learnifyflutter/utilities/session.dart';
 
