@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:learnifyflutter/widgets/Custom_waiting_dialog.dart';
 import 'package:learnifyflutter/widgets/custom_dialog_basic.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -543,6 +544,14 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
                                   ),
                                   InkWell(
                                     onTap: () async {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomAlertDialog3(
+                                              title: "Processiong",
+                                              description: "",
+                                            );
+                                          });
                                       final bool check = await checksub();
                                       if (check == false) {
                                         _onStartCardEntryFlow();

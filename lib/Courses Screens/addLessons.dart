@@ -234,6 +234,14 @@ class _AddLessonsState extends State<AddLessons> {
                                     ),
                                     InkWell(
                                       onTap: () async {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return CustomAlertDialog3(
+                                                title: "Processiong",
+                                                description: "",
+                                              );
+                                            });
                                         var uri = Uri.parse(BaseURL +
                                             "lessons/new/" +
                                             checkid());

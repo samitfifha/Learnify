@@ -6,6 +6,7 @@ import 'package:learnifyflutter/Welcome%20Screens/mainscreen.dart';
 import 'package:learnifyflutter/thread.dart';
 import 'package:learnifyflutter/utilities/customimage.dart';
 import 'package:learnifyflutter/utilities/utils.dart';
+import 'package:learnifyflutter/widgets/Custom_waiting_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/ForumModel.dart';
@@ -20,7 +21,7 @@ class MessagesScreen extends StatefulWidget {
 late String userid;
 String? title;
 String? content;
-DateFormat? createdat;
+DateTime? createdat;
 String? tag;
 List threads = [];
 late Future<bool> fetchedthreads;
@@ -31,9 +32,12 @@ Future<bool> fetchthreads() async {
   http.Response response =
       await http.get(Uri.parse(BaseURL + "threads/")).then((response) async {
     print(response.statusCode);
-    if (response.statusCode == 201) {
-      Map<String, dynamic> data = json.decode(response.body);
-      threads = data["threads"];
+    if (response.statusCode == 200) {
+      threads = json
+          .decode(response.body)
+          .map((data) => Thread.fromJson(data))
+          .toList();
+
       print(threads);
     }
 
@@ -54,89 +58,95 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          decoration: BoxDecoration(color: Colors.grey.shade100),
-        ),
-        FutureBuilder(builder: (context, snapshot) {
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              splashColor: Colors.cyan,
-              onPressed: () => openDialog(),
-              child: Icon(
-                Icons.add_business_outlined,
+    return RefreshIndicator(
+      onRefresh: () async {
+        await fetchedthreads;
+        setState(() {});
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(color: Colors.grey.shade100),
+          ),
+          FutureBuilder(builder: (context, snapshot) {
+            return Scaffold(
+              floatingActionButton: FloatingActionButton(
+                splashColor: Colors.cyan,
+                onPressed: () => openDialog(),
+                child: Icon(
+                  Icons.add_business_outlined,
+                ),
               ),
-            ),
-            backgroundColor: Colors.transparent,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 73),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainScreen()));
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 90,
-                          ),
-                          Text(
-                            'Community',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 25,
-                              fontFamily: 'Nisebuschgardens',
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: 400,
-                        child: Container(
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: Colors.blueAccent,
-                                  ),
-                                  hintText: "Search",
-                                ),
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 73),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainScreen()));
+                              },
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.black,
                               ),
-                              SizedBox(
-                                height: 300,
-                                child: getthreads(),
+                            ),
+                            SizedBox(
+                              width: 90,
+                            ),
+                            Text(
+                              'Community',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 25,
+                                fontFamily: 'Nisebuschgardens',
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      )
-                    ],
-                  )),
-            ),
-          );
-        })
-      ],
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          height: 400,
+                          child: Container(
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: Colors.blueAccent,
+                                    ),
+                                    hintText: "Search",
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 300,
+                                  child: getthreads(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ),
+            );
+          })
+        ],
+      ),
     );
   }
 
@@ -190,6 +200,15 @@ class _MessagesScreenState extends State<MessagesScreen> {
           actions: [
             TextButton(
                 onPressed: () async {
+                  //showAboutDialog(context: context);
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CustomAlertDialog3(
+                          title: "Processiong",
+                          description: "",
+                        );
+                      });
                   Map<String, String> headers = {
                     "Content-Type": "application/json; charset=utf-8"
                   };
@@ -244,8 +263,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ]),
         child: InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ThreadScreen()));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ThreadScreen(mythread: threads[index]),
+              ),
+            );
           },
           child: Row(
             children: [
@@ -267,7 +290,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("dsfsdfsdfs"),
+                  Text(threads[index].createdAt.toString(),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ],
               )),
               Spacer(),
@@ -275,6 +300,25 @@ class _MessagesScreenState extends State<MessagesScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

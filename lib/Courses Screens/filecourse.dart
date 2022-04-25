@@ -43,6 +43,7 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
 
     if (result != null) {
       Coursefile = result!.files.single.path;
+      print(Coursefile);
     } else {
       // User canceled the picker
     }
@@ -291,6 +292,14 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
                                     ),
                                     InkWell(
                                       onTap: () async {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return CustomAlertDialog3(
+                                                title: "Processiong",
+                                                description: "",
+                                              );
+                                            });
                                         var uri = Uri.parse(
                                             BaseURL + "courses/new/" + userid);
 

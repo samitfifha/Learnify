@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: const SplachScreen(),
-      //body: Pin_verif(),
+      //body: testScreen(),
       //body:
     );
   }

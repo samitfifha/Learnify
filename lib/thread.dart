@@ -10,7 +10,8 @@ import 'package:http/http.dart' as http;
 import 'Models/ForumModel.dart';
 
 class ThreadScreen extends StatefulWidget {
-  const ThreadScreen({Key? key}) : super(key: key);
+  var mythread;
+  ThreadScreen({Key? key, this.mythread}) : super(key: key);
 
   @override
   State<ThreadScreen> createState() => _ThreadScreenState();
@@ -47,7 +48,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "message.time",
+            widget.mythread.title,
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16.0,
@@ -56,7 +57,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
           ),
           SizedBox(height: 8.0),
           Text(
-            "message.text",
+            "th.text",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16.0,
@@ -158,7 +159,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                           width: 90,
                         ),
                         Text(
-                          'esm',
+                          widget.mythread.title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
@@ -203,7 +204,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                       shrinkWrap: true,
                       reverse: true,
                       padding: EdgeInsets.only(top: 15.0),
-                      itemCount: 3,
+                      itemCount: widget.mythread.comments.length,
                       itemBuilder: (context, index) => _buildMessage(),
                     )),
                     _buildMessageComposer(),
