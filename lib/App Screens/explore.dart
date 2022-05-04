@@ -107,16 +107,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
                       getSearchbox(),
-                      SizedBox(
-                        height: 20,
+                      Positioned(
+                        child: getCategory(),
                       ),
-                      getCategory(),
-                      SizedBox(
-                        height: 400,
+                      Positioned(
                         child: getMyCourses(),
                       )
                     ],
@@ -217,6 +212,8 @@ String func(index) {
 
 Widget getMyCourses() {
   return ListView.builder(
+    scrollDirection: Axis.vertical,
+    shrinkWrap: true,
     itemCount: list.length,
     itemBuilder: (context, index) => Container(
       padding: EdgeInsets.all(10),

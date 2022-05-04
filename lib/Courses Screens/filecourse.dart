@@ -49,7 +49,16 @@ class _FileCourseScreenState extends State<FileCourseScreen> {
     }
   }
 
-  final items = ['Coding', 'programming', 'languages', 'cretifed', 'math'];
+  final items = [
+    'Coding',
+    'design',
+    'languages',
+    'business',
+    'art',
+    'cooking',
+    'music',
+    'finance',
+  ];
   final items1 = ['1 ', '2', '3', '4', '5', '6', '7', '8'];
   String? value;
   String _value = "";
