@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learnifyflutter/widgets/Custom_waiting_dialog.dart';
 import 'package:learnifyflutter/widgets/custom_dialog_basic.dart';
@@ -47,6 +48,14 @@ import 'dart:typed_data';
 import 'package:native_screenshot/native_screenshot.dart';
 
 import 'package:camera/camera.dart';
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails("1", "Learnify", "Learnify");
+const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
 
 //take a picture with camera
 Future<String?> takePic() async {
@@ -108,6 +117,14 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
     try {
       var response = await request.send();
       debugPrint(response.statusCode.toString());
+      if (response.statusCode == 406) {
+        debugPrint("Face not found");
+        await flutterLocalNotificationsPlugin.show(
+            1,
+            "Learnify Assist",
+            "It seems like you are not focused on the course. Please follow your tutor.",
+            platformChannelSpecifics);
+      }
     } catch (e) {
       print(e);
     }
