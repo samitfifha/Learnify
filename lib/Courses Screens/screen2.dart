@@ -107,6 +107,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
     request.files.add(await http.MultipartFile.fromPath('file', path));
     try {
       var response = await request.send();
+      debugPrint(response.statusCode.toString());
     } catch (e) {
       print(e);
     }
@@ -230,7 +231,7 @@ class _Screen2State extends State<Screen2> with SingleTickerProviderStateMixin {
   joinmeeting(index) async {
     try {
       Map<FeatureFlagEnum, bool> feautueflags = {
-        FeatureFlagEnum.WELCOME_PAGE_ENABLED: true
+        FeatureFlagEnum.WELCOME_PAGE_ENABLED: false
       };
       if (Platform.isAndroid) {
         feautueflags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
